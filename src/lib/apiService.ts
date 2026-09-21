@@ -25,7 +25,7 @@ export const doctorService = {
     getDoctorsByClinic: (clinicId: string) => api.get(`/doctors/clinic/${clinicId}`),
 };
 
-// ---------- NOTIFICATIONS / CALLS ----------
+// ---------- NOTIFICATIONS / CALLS  ----------
 export const notificationService = {
     saveFcmToken: (token: string) => api.post("/notifications/doctor-token", { token }),
 
