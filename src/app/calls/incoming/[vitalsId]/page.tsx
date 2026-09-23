@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { Phone, PhoneOff } from "lucide-react";
 import { notificationService } from "@/lib/apiService";
+import { AndroidBridge } from "@/lib/AndroidBridge";
 
 export default function IncomingCallPage() {
     const { vitalsId } = useParams<{ vitalsId: string }>();
@@ -19,6 +20,7 @@ export default function IncomingCallPage() {
                 const call = await notificationService.getCallStatus(vitalsId);
                 if (call.status !== "pending") {
                     if (pollRef.current) clearInterval(pollRef.current);
+                    AndroidBridge.notifyCallEnded();
                     router.replace("/dashboard");
                 }
             } catch { }
@@ -29,7 +31,8 @@ export default function IncomingCallPage() {
     async function handleAccept() {
         setLoading(true);
         try {
-            if (pollRef.current) clearInterval(pollRef.current); // stop polling before navigating
+            if (pollRef.current) clearInterval(pollRef.current);
+            AndroidBridge.notifyCallEnded();
             await notificationService.acceptCall(vitalsId);
             router.replace(`/calls/active/${vitalsId}`);
         } catch (err) {
@@ -45,7 +48,9 @@ export default function IncomingCallPage() {
         } catch (err) {
             console.error(err);
         } finally {
+            AndroidBridge.notifyCallEnded();
             router.replace("/dashboard");
+
         }
     }
 
