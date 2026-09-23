@@ -3,6 +3,9 @@ declare global {
     CallAction?: {
       postMessage: (message: string) => void;
     };
+    AuthReady?: {
+      postMessage: (message: string) => void;
+    };
   }
 }
 
@@ -16,7 +19,14 @@ function notifyCallEnded(): void {
   }
 }
 
+function notifyLoggedIn(): void {
+  if (typeof window !== "undefined" && window.AuthReady) {
+    window.AuthReady.postMessage("logged_in");
+  }
+}
+
 export const AndroidBridge = {
   isAvailable: isAndroidBridgeAvailable,
   notifyCallEnded,
+  notifyLoggedIn,
 };

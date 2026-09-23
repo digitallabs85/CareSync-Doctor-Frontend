@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { authService, notificationService } from "@/lib/apiService";
 import { requestFcmToken } from "@/lib/firebase";
+import { AndroidBridge } from "@/lib/AndroidBridge";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -22,14 +23,19 @@ export default function LoginPage() {
             const result = await authService.login(email, password);
             localStorage.setItem("doctorToken", result.token);
             localStorage.setItem("doctor", JSON.stringify(result.doctor));
+            AndroidBridge.notifyLoggedIn()
 
             console.log("about to request fcm token");
             try {
-                const fcmToken = await requestFcmToken();
-                console.log("fcm token result:", fcmToken);
-                if (fcmToken) {
-                    await notificationService.saveFcmToken(fcmToken);
-                    console.log("fcm token saved to backend");
+                if (AndroidBridge.isAvailable()) {
+                    console.log("Running inside native app — skipping web push token");
+                } else {
+                    const fcmToken = await requestFcmToken();
+                    console.log("fcm token result:", fcmToken);
+                    if (fcmToken) {
+                        await notificationService.saveFcmToken(fcmToken);
+                        console.log("fcm token saved to backend");
+                    }
                 }
             } catch (err) {
                 console.error("fcm error:", err);
