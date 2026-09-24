@@ -96,7 +96,11 @@ export default function DashboardPage() {
         ) : (
           <ul className="space-y-2">
             {queue.map((item) => (
-              <li key={item.vitalsId} className="rounded border p-3">
+              <li
+                key={item.vitalsId}
+                onClick={() => router.push(`/consult/${item.vitalsId}?type=walkin`)}
+                className="rounded border p-3 cursor-pointer hover:bg-gray-50"
+              >
                 <strong>#{item.token}</strong> — {item.patientName}
               </li>
             ))}
