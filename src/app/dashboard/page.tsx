@@ -21,6 +21,8 @@ export default function DashboardPage() {
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [consultItem, setConsultItem] = useState<QueueItem | null>(null);
+  const [infoItem, setInfoItem] = useState<QueueItem | null>(null);
 
   const fetchQueue = useCallback(async () => {
     try {
@@ -96,12 +98,24 @@ export default function DashboardPage() {
         ) : (
           <ul className="space-y-2">
             {queue.map((item) => (
-              <li
-                key={item.vitalsId}
-                onClick={() => router.push(`/consult/${item.vitalsId}?type=walkin`)}
-                className="rounded border p-3 cursor-pointer hover:bg-gray-50"
-              >
-                <strong>#{item.token}</strong> — {item.patientName}
+              <li key={item.vitalsId} className="rounded border p-3 flex items-center justify-between">
+                <div>
+                  <strong>#{item.token}</strong> — {item.patientName}
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setInfoItem(item)}
+                    className="text-xs px-2 py-1 rounded border"
+                  >
+                    Info
+                  </button>
+                  <button
+                    onClick={() => setConsultItem(item)}
+                    className="text-xs px-2 py-1 rounded bg-[#0297d6] text-white"
+                  >
+                    Consult
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
