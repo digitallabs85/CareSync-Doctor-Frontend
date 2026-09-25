@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { authService, doctorService, notificationService } from "@/lib/apiService";
+import { PrescriptionModal } from "../components/PrescriptionModal";
+import { PatientInfoModal } from "../components/PatientInfoModal";
 
 type QueueItem = {
   vitalsId: string;
@@ -121,6 +123,25 @@ export default function DashboardPage() {
           </ul>
         )}
       </section>
+
+      {consultItem && (
+        <PrescriptionModal
+          patientId={consultItem.patientId}
+          patientToken={consultItem.token}
+          vitalsId={consultItem.vitalsId}
+          onClose={() => {
+            setConsultItem(null);
+            fetchQueue(); // refresh queue after prescription saved
+          }}
+        />
+      )}
+
+      {infoItem && (
+        <PatientInfoModal
+          vitalsId={infoItem.vitalsId}
+          onClose={() => setInfoItem(null)}
+        />
+      )}
     </div>
   );
 }
