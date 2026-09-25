@@ -7,6 +7,7 @@ import { authService, doctorService, notificationService } from "@/lib/apiServic
 import { PrescriptionModal } from "../components/PrescriptionModal";
 import { PatientInfoModal } from "../components/PatientInfoModal";
 import { ConsultModal } from "../components/ConsultModal";
+import { AndroidBridge } from "@/lib/AndroidBridge";
 
 type QueueItem = {
   vitalsId: string;
@@ -50,6 +51,7 @@ export default function DashboardPage() {
     try {
       await doctorService.updateStatus(next);
       setStatus(next);
+      AndroidBridge.notifyDoctorStatus(next);
     } catch (err) {
       console.error("Status update failed:", err);
     }
