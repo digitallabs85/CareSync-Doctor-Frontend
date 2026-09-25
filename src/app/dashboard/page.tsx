@@ -6,6 +6,7 @@ import { LogOut } from "lucide-react";
 import { authService, doctorService, notificationService } from "@/lib/apiService";
 import { PrescriptionModal } from "../components/PrescriptionModal";
 import { PatientInfoModal } from "../components/PatientInfoModal";
+import { ConsultModal } from "../components/ConsultModal";
 
 type QueueItem = {
   vitalsId: string;
@@ -24,7 +25,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
   const [consultItem, setConsultItem] = useState<QueueItem | null>(null);
-  const [infoItem, setInfoItem] = useState<QueueItem | null>(null);
+
 
   const fetchQueue = useCallback(async () => {
     try {
@@ -105,16 +106,7 @@ export default function DashboardPage() {
                   <strong>#{item.token}</strong> — {item.patientName}
                 </div>
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => setInfoItem(item)}
-                    className="text-xs px-2 py-1 rounded border"
-                  >
-                    Info
-                  </button>
-                  <button
-                    onClick={() => setConsultItem(item)}
-                    className="text-xs px-2 py-1 rounded bg-[#0297d6] text-white"
-                  >
+                  <button onClick={() => setConsultItem(item)} className="text-xs px-2 py-1 rounded bg-[#0297d6] text-white">
                     Consult
                   </button>
                 </div>
@@ -125,21 +117,14 @@ export default function DashboardPage() {
       </section>
 
       {consultItem && (
-        <PrescriptionModal
+        <ConsultModal
           patientId={consultItem.patientId}
           patientToken={consultItem.token}
           vitalsId={consultItem.vitalsId}
           onClose={() => {
             setConsultItem(null);
-            fetchQueue(); // refresh queue after prescription saved
+            fetchQueue();
           }}
-        />
-      )}
-
-      {infoItem && (
-        <PatientInfoModal
-          vitalsId={infoItem.vitalsId}
-          onClose={() => setInfoItem(null)}
         />
       )}
     </div>
