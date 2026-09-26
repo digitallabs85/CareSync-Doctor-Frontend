@@ -25,12 +25,41 @@ export default function DashboardPage() {
   const [loadingCompleted, setLoadingCompleted] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
   const [consultItem, setConsultItem] = useState<QueueItem | null>(null);
+  // add this state near your other useState calls
+  const [notificationsBlocked, setNotificationsBlocked] = useState(false);
 
+  // replace the permission-check useEffect with this
   useEffect(() => {
     if (!("Notification" in window)) return;
-    if (Notification.permission === "default") {
-      Notification.requestPermission();
+
+    let permissionStatus: PermissionStatus | null = null;
+
+    async function checkPermission() {
+      if (Notification.permission === "default") {
+        const result = await Notification.requestPermission();
+        setNotificationsBlocked(result === "denied");
+      } else {
+        setNotificationsBlocked(Notification.permission === "denied");
+      }
+
+      // Listen for live changes (works in Chrome/Edge; Safari/Firefox may not support 'notifications' query)
+      if ("permissions" in navigator) {
+        try {
+          permissionStatus = await navigator.permissions.query({ name: "notifications" as PermissionName });
+          permissionStatus.onchange = () => {
+            setNotificationsBlocked(permissionStatus!.state === "denied");
+          };
+        } catch (err) {
+          console.error("Permissions API query failed:", err);
+        }
+      }
     }
+
+    checkPermission();
+
+    return () => {
+      if (permissionStatus) permissionStatus.onchange = null;
+    };
   }, []);
 
   const fetchQueue = useCallback(async () => {
@@ -171,6 +200,18 @@ export default function DashboardPage() {
             fetchCompleted();
           }}
         />
+      )}
+
+      {notificationsBlocked && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="max-w-sm w-full rounded-2xl bg-white p-6 text-center shadow-2xl">
+            <div className="text-4xl mb-3">🔔</div>
+            <h2 className="text-xl font-bold text-slate-800 mb-2">Notifications Blocked</h2>
+            <p className="text-base text-slate-600">
+              Click the 🔒 icon in the address bar → set Notifications to <strong>Allow</strong>.
+            </p>
+          </div>
+        </div>
       )}
     </div>
   );
