@@ -1,11 +1,8 @@
 "use client";
-
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { authService, doctorService, notificationService } from "@/lib/apiService";
-import { PrescriptionModal } from "../components/PrescriptionModal";
-import { PatientInfoModal } from "../components/PatientInfoModal";
 import { ConsultModal } from "../components/ConsultModal";
 import { AndroidBridge } from "@/lib/AndroidBridge";
 
@@ -23,10 +20,11 @@ export default function DashboardPage() {
   const router = useRouter();
   const [status, setStatus] = useState<"online" | "offline">("offline");
   const [queue, setQueue] = useState<QueueItem[]>([]);
+  const [completed, setCompleted] = useState<QueueItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingCompleted, setLoadingCompleted] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
   const [consultItem, setConsultItem] = useState<QueueItem | null>(null);
-
 
   const fetchQueue = useCallback(async () => {
     try {
@@ -39,12 +37,27 @@ export default function DashboardPage() {
     }
   }, []);
 
+  const fetchCompleted = useCallback(async () => {
+    try {
+      const data = await doctorService.getCompletedToday();
+      setCompleted(data);
+    } catch (err) {
+      console.error("Completed fetch failed:", err);
+    } finally {
+      setLoadingCompleted(false);
+    }
+  }, []);
+
   useEffect(() => {
     authService.me().then((doctor) => setStatus(doctor.doctorStatus));
     fetchQueue();
-    const interval = setInterval(fetchQueue, 5000);
+    fetchCompleted();
+    const interval = setInterval(() => {
+      fetchQueue();
+      fetchCompleted();
+    }, 5000);
     return () => clearInterval(interval);
-  }, [fetchQueue]);
+  }, [fetchQueue, fetchCompleted]);
 
   async function toggleStatus() {
     const next = status === "online" ? "offline" : "online";
@@ -118,6 +131,28 @@ export default function DashboardPage() {
         )}
       </section>
 
+      <section className="p-4">
+        <h2 className="mb-2 font-medium">Completed Today</h2>
+        {loadingCompleted ? (
+          <p>Loading...</p>
+        ) : completed.length === 0 ? (
+          <p>No completed consults today.</p>
+        ) : (
+          <ul className="space-y-2">
+            {completed.map((item) => (
+              <li key={item.vitalsId} className="rounded border p-3 flex items-center justify-between bg-slate-50">
+                <div className="text-slate-500">
+                  <strong>#{item.token}</strong> — {item.patientName}
+                </div>
+                <button onClick={() => setConsultItem(item)} className="text-xs px-2 py-1 rounded bg-slate-400 text-white hover:bg-slate-500">
+                  Update
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
       {consultItem && (
         <ConsultModal
           patientId={consultItem.patientId}
@@ -126,6 +161,7 @@ export default function DashboardPage() {
           onClose={() => {
             setConsultItem(null);
             fetchQueue();
+            fetchCompleted();
           }}
         />
       )}

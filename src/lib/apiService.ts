@@ -18,6 +18,8 @@ export const doctorService = {
 
     getQueue: () => api.get("/doctors/queue"),
 
+    getCompletedToday: () => api.get("/doctors/completed-today"),
+
     getAll: (clinicId?: string) => api.get(`/doctors${clinicId ? `?clinicId=${clinicId}` : ""}`),
 
     getClinicsForDoctor: (doctorId: string) => api.get(`/doctors/${doctorId}/clinics`),
