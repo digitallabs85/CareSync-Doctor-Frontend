@@ -26,6 +26,13 @@ export default function DashboardPage() {
   const [loggingOut, setLoggingOut] = useState(false);
   const [consultItem, setConsultItem] = useState<QueueItem | null>(null);
 
+  useEffect(() => {
+    if (!("Notification" in window)) return;
+    if (Notification.permission === "default") {
+      Notification.requestPermission();
+    }
+  }, []);
+
   const fetchQueue = useCallback(async () => {
     try {
       const data = await doctorService.getQueue();
