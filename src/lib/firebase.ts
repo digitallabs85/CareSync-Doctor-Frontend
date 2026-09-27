@@ -19,8 +19,9 @@ export async function requestFcmToken(): Promise<string | null> {
   const permission = await Notification.requestPermission();
   if (permission !== "granted") return null;
 
-  await navigator.serviceWorker.register("/firebase-messaging-sw.js");
-  const registration = await navigator.serviceWorker.ready; // <-- waits for active state
+  // next-pwa auto-registers /sw.js (which now includes firebase-messaging-sw.js via importScripts)
+  // no manual .register() call needed anymore
+  const registration = await navigator.serviceWorker.ready;
 
   const messaging = getMessaging(app);
   const token = await getToken(messaging, {
