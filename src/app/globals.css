@@ -1,130 +1,95 @@
+/* The v4 engine import */
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/* 
+  Tailwind v4 natively converts variables inside @theme into utility classes.
+  Defining --color-skeuo-red here automatically gives you text-skeuo-red, 
+  bg-skeuo-red, ring-skeuo-red, etc. 
+*/
+@theme {
+  --color-skeuo-base: #f5f5f5;
+  --color-skeuo-surface: #e5e5e5;
+  --color-skeuo-text: #171717;
+  --color-skeuo-green: #22c55e;
+  --color-skeuo-muted: #737373;
+  --color-skeuo-red: #ef4444;
+  --color-skeuo-red-dark: #dc2626;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  /* Shadow Variables for use inside custom utilities */
+  --shadow-dark: rgba(0, 0, 0, 0.06);
+  --shadow-light: rgba(255, 255, 255, 0.9);
+  --shadow-brand: rgba(220, 38, 38, 0.25);
 }
 
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
+/* Establish the base canvas */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--color-skeuo-base);
+    color: var(--color-skeuo-text);
   }
-  html {
-    @apply font-sans;
+}
+
+/* 
+  In v4, @utility replaces @layer components for custom classes. 
+  It natively supports CSS nesting (like &:active).
+*/
+@utility skeuo-raised {
+  background-color: var(--color-skeuo-base);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 8px 8px 16px var(--shadow-dark),
+             -8px -8px 16px var(--shadow-light);
+}
+
+@utility skeuo-pressed {
+  background-color: var(--color-skeuo-base);
+  border: 1px solid transparent;
+  box-shadow: inset 4px 4px 8px var(--shadow-dark),
+              inset -4px -4px 8px var(--shadow-light);
+}
+
+@utility skeuo-btn-red {
+  background-image: linear-gradient(to bottom, var(--color-skeuo-red), var(--color-skeuo-red-dark));
+  color: #ffffff;
+  box-shadow: 6px 6px 12px var(--shadow-brand),
+             -4px -4px 10px var(--shadow-light),
+             inset 0 2px 1px rgba(255, 255, 255, 0.3),
+             inset 0 -2px 1px rgba(0, 0, 0, 0.2);
+  transition: all 200ms ease;
+
+  &:active {
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
   }
+}
+
+@utility skeuo-btn-light {
+  background-color: var(--color-skeuo-base);
+  color: var(--color-skeuo-text);
+  box-shadow: 5px 5px 10px var(--shadow-dark),
+             -5px -5px 10px var(--shadow-light),
+             inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  transition: all 200ms ease;
+
+  &:active {
+    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.08),
+                inset -3px -3px 6px var(--shadow-light);
+    transform: translateY(2px);
+  }
+}
+
+@utility skeuo-pill {
+  box-shadow: inset 2px 2px 5px var(--shadow-dark),
+              inset -2px -2px 5px var(--shadow-light);
+}
+
+@utility btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 9999px;
+  border: 0;
+  padding: 14px 21px;
+  font-size: 13px;
+  font-weight: 700;
 }

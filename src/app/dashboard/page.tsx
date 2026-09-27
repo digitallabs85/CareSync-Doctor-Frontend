@@ -1,10 +1,13 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
+import { LogOut, Users, CheckCircle, Video, Activity, BellOff, Power, RefreshCw } from "lucide-react";
 import { authService, doctorService, notificationService } from "@/lib/apiService";
 import { ConsultModal } from "../components/ConsultModal";
 import { AndroidBridge } from "@/lib/AndroidBridge";
+import logo from '../../../public/logo.png'
+import Image from "next/image";
+import { config } from "../../../config";
 
 type QueueItem = {
   vitalsId: string;
@@ -16,6 +19,48 @@ type QueueItem = {
   createdAt: string;
 };
 
+/* ------------------------------------------------------------------ *
+ *  Section Component — Enforces layout consistency across the app.
+ *  Paddings and margins remain strictly untouched.
+ * ------------------------------------------------------------------ */
+interface SectionProps {
+  icon?: React.ReactNode;
+  title: string;
+  subtitle?: string;
+  action?: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+  bodyClassName?: string;
+}
+
+const Section: React.FC<SectionProps> = ({
+  icon,
+  title,
+  subtitle,
+  action,
+  children,
+  className,
+  bodyClassName,
+}) => (
+  <section className={`overflow-hidden rounded-2xl border border-skeuo-surface bg-white shadow-sm ${className ?? ""}`}>
+    <div className="flex gap-2 border-b border-skeuo-surface px-4 py-4 items-center justify-between sm:px-5">
+      <div className="flex items-center gap-2.5">
+        {icon && (
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-skeuo-red text-white">
+            {icon}
+          </div>
+        )}
+        <div className="min-w-0">
+          <h2 className="text-base font-bold text-skeuo-text">{title}</h2>
+          {subtitle && <p className="text-xs text-skeuo-muted">{subtitle}</p>}
+        </div>
+      </div>
+      {action}
+    </div>
+    <div className={`p-4 sm:p-8 ${bodyClassName ?? ""}`}>{children}</div>
+  </section>
+);
+
 export default function DashboardPage() {
   const router = useRouter();
   const [status, setStatus] = useState<"online" | "offline">("offline");
@@ -25,10 +70,8 @@ export default function DashboardPage() {
   const [loadingCompleted, setLoadingCompleted] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
   const [consultItem, setConsultItem] = useState<QueueItem | null>(null);
-  // add this state near your other useState calls
   const [notificationsBlocked, setNotificationsBlocked] = useState(false);
 
-  // replace the permission-check useEffect with this
   useEffect(() => {
     if (!("Notification" in window)) return;
 
@@ -42,7 +85,6 @@ export default function DashboardPage() {
         setNotificationsBlocked(Notification.permission === "denied");
       }
 
-      // Listen for live changes (works in Chrome/Edge; Safari/Firefox may not support 'notifications' query)
       if ("permissions" in navigator) {
         try {
           permissionStatus = await navigator.permissions.query({ name: "notifications" as PermissionName });
@@ -125,70 +167,153 @@ export default function DashboardPage() {
   }
 
   return (
-    <div>
-      <header className="flex items-center justify-between p-4 border-b">
-        <h1 className="text-lg font-semibold">Dashboard</h1>
-        <div className="flex items-center gap-3">
-          <button onClick={toggleStatus} className="rounded bg-blue-600 px-3 py-1.5 text-sm text-white">
-            {status === "online" ? "Go Offline" : "Go Online (video calls)"}
-          </button>
-          <button
-            onClick={handleLogout}
-            disabled={loggingOut}
-            className="flex items-center gap-1 rounded border px-3 py-1.5 text-sm text-red-600 disabled:opacity-50"
-          >
-            <LogOut size={16} />
-            {loggingOut ? "Logging out..." : "Logout"}
-          </button>
+    <div className="min-h-screen bg-skeuo-base">
+      {/* ================= Header ================= */}
+      <header className="sticky top-0 z-40 border-b border-skeuo-surface bg-white/80 backdrop-blur-md px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Image src={logo} alt="logo" className="w-10"/>
+            <div>
+              <h1 className="text-lg font-black text-skeuo-text leading-tight">{config.app}</h1>
+              <p className={`text-xs font-bold uppercase tracking-wider ${status === "online" ? "text-skeuo-green" : "text-skeuo-muted"}`}>
+                {status === "online" ? "Receiving Calls" : "Currently Offline"}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleStatus}
+              className={`group flex items-center gap-2 rounded-xl border px-2 sm:px-4 py-2 text-sm font-bold transition-all ${
+                status === "online"
+                  ? "border-skeuo-surface bg-white text-skeuo-text hover:border-skeuo-red/30 hover:bg-skeuo-red/5 hover:text-skeuo-red"
+                  : "border-transparent bg-skeuo-green text-white shadow-md hover:bg-green-600 hover:shadow-lg"
+              }`}
+            >
+              <Power size={16} className={status === "online" ? "group-hover:animate-pulse" : ""} />
+              <span className="hidden sm:inline">{status === "online" ? "Go Offline" : "Go Online"}</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              disabled={loggingOut}
+              className="flex items-center gap-2 rounded-xl border border-skeuo-surface bg-white px-2 sm:px-4 py-2 text-sm font-bold text-skeuo-muted transition-all hover:border-skeuo-red/30 hover:bg-skeuo-red/5 hover:text-skeuo-red disabled:opacity-50"
+            >
+              <LogOut size={16} />
+              <span className="hidden sm:inline">{loggingOut ? "Logging out..." : "Logout"}</span>
+            </button>
+          </div>
         </div>
       </header>
 
-      <section className="p-4">
-        <h2 className="mb-2 font-medium">Patient Queue</h2>
-        {loading ? (
-          <p>Loading...</p>
-        ) : queue.length === 0 ? (
-          <p>No patients waiting.</p>
-        ) : (
-          <ul className="space-y-2">
-            {queue.map((item) => (
-              <li key={item.vitalsId} className="rounded border p-3 flex items-center justify-between">
-                <div>
-                  <strong>#{item.token}</strong> — {item.patientName}
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={() => setConsultItem(item)} className="text-xs px-2 py-1 rounded bg-[#0297d6] text-white">
-                    Consult
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      {/* ================= Main Layout ================= */}
+      <main className="mx-auto w-full max-w-7xl grid grid-cols-1 gap-6 px-4 py-8 lg:grid-cols-[1fr_400px] sm:px-6 lg:px-8">
+        
+        {/* ================= Left Column: Active Queue ================= */}
+        <div className="flex flex-col gap-6">
+          <Section
+            icon={<Users className="h-4 w-4" />}
+            title="Active Patient Queue"
+            subtitle={`${queue.length} patient${queue.length !== 1 ? 's' : ''} waiting for consultation`}
+            action={
+              <button onClick={fetchQueue} disabled={loading} className="rounded-lg p-2 text-skeuo-muted transition-colors hover:bg-skeuo-surface hover:text-skeuo-text">
+                <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+              </button>
+            }
+          >
+            {loading ? (
+              <div className="flex flex-col items-center justify-center gap-3 py-12 text-sm text-skeuo-muted">
+                <span className="h-6 w-6 animate-spin rounded-full border-2 border-skeuo-red border-t-transparent" />
+                Loading queue...
+              </div>
+            ) : queue.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-skeuo-surface bg-skeuo-base/50 py-16 text-center text-sm text-skeuo-muted">
+                <Activity size={32} className="mx-auto mb-3 opacity-20" />
+                No patients currently waiting in the queue.
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3 animate-fade-in">
+                {queue.map((item) => (
+                  <div key={item.vitalsId} className="flex items-center justify-between rounded-xl border border-skeuo-surface bg-white p-4 transition-all hover:border-skeuo-red/30 hover:shadow-md">
+                    <div className="flex items-center gap-4">
+                      <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-skeuo-red/10 text-lg font-black text-skeuo-red">
+                        {item.token}
+                      </div>
+                      <div>
+                        <p className="text-base font-bold text-skeuo-text">{item.patientName}</p>
+                        <p className="mt-0.5 text-xs font-medium text-skeuo-muted">
+                          Added: {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setConsultItem(item)}
+                      className="group flex h-10 items-center gap-2 rounded-lg bg-skeuo-red px-4 text-sm font-bold text-white transition-all hover:bg-skeuo-red-dark hover:shadow-lg hover:shadow-skeuo-red/20"
+                    >
+                      <Video size={16} />
+                      <span className="hidden sm:inline">Start Consult</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Section>
+        </div>
 
-      <section className="p-4">
-        <h2 className="mb-2 font-medium">Completed Today</h2>
-        {loadingCompleted ? (
-          <p>Loading...</p>
-        ) : completed.length === 0 ? (
-          <p>No completed consults today.</p>
-        ) : (
-          <ul className="space-y-2">
-            {completed.map((item) => (
-              <li key={item.vitalsId} className="rounded border p-3 flex items-center justify-between bg-slate-50">
-                <div className="text-slate-500">
-                  <strong>#{item.token}</strong> — {item.patientName}
-                </div>
-                <button onClick={() => setConsultItem(item)} className="text-xs px-2 py-1 rounded bg-slate-400 text-white hover:bg-slate-500">
-                  Update
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+        {/* ================= Right Column: Completed Today ================= */}
+        <div className="flex flex-col gap-6">
+          <Section
+            icon={<CheckCircle className="h-4 w-4" />}
+            title="Completed Today"
+            subtitle={`${completed.length} consult${completed.length !== 1 ? 's' : ''} finished`}
+            className="h-full"
+            bodyClassName="h-full flex flex-col"
+            action={
+              <button onClick={fetchCompleted} disabled={loadingCompleted} className="rounded-lg p-2 text-skeuo-muted transition-colors hover:bg-skeuo-surface hover:text-skeuo-text">
+                <RefreshCw size={16} className={loadingCompleted ? "animate-spin" : ""} />
+              </button>
+            }
+          >
+            {loadingCompleted ? (
+              <div className="flex flex-col gap-3">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="flex animate-pulse items-center gap-3 rounded-xl border border-skeuo-surface p-4">
+                    <div className="h-10 w-10 rounded-full bg-skeuo-surface" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-3 w-3/4 rounded bg-skeuo-surface" />
+                      <div className="h-2 w-1/2 rounded bg-skeuo-surface/60" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : completed.length === 0 ? (
+              <div className="flex h-40 flex-col items-center justify-center rounded-xl border border-dashed border-skeuo-surface bg-skeuo-base/50 text-center text-sm text-skeuo-muted">
+                No completed consults yet today.
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2.5 animate-fade-in">
+                {completed.map((item) => (
+                  <div key={item.vitalsId} className="flex items-center justify-between rounded-xl border border-skeuo-surface bg-skeuo-base/30 p-3 transition-colors hover:bg-white">
+                    <div className="flex items-center gap-3">
+                      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-skeuo-surface text-sm font-black text-skeuo-muted">
+                        {item.token}
+                      </div>
+                      <p className="truncate text-sm font-bold text-skeuo-text">{item.patientName}</p>
+                    </div>
+                    <button
+                      onClick={() => setConsultItem(item)}
+                      className="rounded-lg border border-skeuo-surface bg-white px-3 py-1.5 text-xs font-bold text-skeuo-muted transition-colors hover:border-skeuo-text hover:text-skeuo-text"
+                    >
+                      Update
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Section>
+        </div>
+      </main>
 
+      {/* ================= Consult Modal ================= */}
       {consultItem && (
         <ConsultModal
           patientId={consultItem.patientId}
@@ -202,14 +327,28 @@ export default function DashboardPage() {
         />
       )}
 
+      {/* ================= Notifications Blocked Alert ================= */}
       {notificationsBlocked && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="max-w-sm w-full rounded-2xl bg-white p-6 text-center shadow-2xl">
-            <div className="text-4xl mb-3">🔔</div>
-            <h2 className="text-xl font-bold text-slate-800 mb-2">Notifications Blocked</h2>
-            <p className="text-base text-slate-600">
-              Click the 🔒 icon in the address bar → set Notifications to <strong>Allow</strong>.
-            </p>
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-2xl">
+            <div className="bg-skeuo-red/10 px-6 py-6 text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-skeuo-red shadow-sm">
+                <BellOff size={28} />
+              </div>
+              <h2 className="mt-4 text-xl font-black text-skeuo-text">Notifications Blocked</h2>
+              <p className="mt-2 text-sm text-skeuo-muted">
+                You will not hear ringing when patients call.
+              </p>
+            </div>
+            <div className="bg-skeuo-base px-6 py-5 text-sm text-skeuo-text">
+              <p className="font-semibold mb-2">How to fix this:</p>
+              <ol className="list-decimal pl-5 space-y-1 text-skeuo-muted">
+                <li>Click the <strong>🔒 icon</strong> in your browser address bar.</li>
+                <li>Find the <strong>Notifications</strong> setting.</li>
+                <li>Change it from Block to <strong>Allow</strong>.</li>
+                <li>Refresh this page.</li>
+              </ol>
+            </div>
           </div>
         </div>
       )}
