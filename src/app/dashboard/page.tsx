@@ -207,7 +207,7 @@
 
 //       {/* ================= Main Layout ================= */}
 //       <main className="mx-auto w-full max-w-7xl grid grid-cols-1 gap-4 px-2 py-4 sm:gap-6 sm:px-6 sm:py-8 lg:grid-cols-[1fr_400px] lg:px-8">
-        
+
 //         {/* ================= Left Column: Active Queue ================= */}
 //         <div className="flex flex-col gap-4 sm:gap-6">
 //           <Section
@@ -527,6 +527,7 @@ export default function DashboardPage() {
     } catch (err) {
       console.error("Logout error:", err);
     } finally {
+      AndroidBridge.notifyLogout(); // add this
       localStorage.removeItem("doctorToken");
       localStorage.removeItem("doctor");
       localStorage.removeItem("fcmToken");
@@ -540,7 +541,7 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-40 border-b border-skeuo-surface bg-white/80 backdrop-blur-md px-3 py-3 sm:px-6 sm:py-4 lg:px-8">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
           <div className="flex items-center gap-2.5 sm:gap-3">
-            <Image src={logo} alt="logo" className="w-10 sm:w-12"/>
+            <Image src={logo} alt="logo" className="w-10 sm:w-12" />
             <div>
               <h1 className="text-lg sm:text-xl font-black text-skeuo-text leading-tight">{config.app}</h1>
               <p className={`text-xs sm:text-sm font-bold uppercase tracking-wider ${status === "online" ? "text-skeuo-green" : "text-skeuo-muted"}`}>
@@ -552,11 +553,10 @@ export default function DashboardPage() {
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={toggleStatus}
-              className={`group flex items-center gap-1.5 sm:gap-2 rounded-xl border px-3 py-2 sm:px-4 sm:py-2.5 text-sm sm:text-base font-bold transition-all ${
-                status === "online"
+              className={`group flex items-center gap-1.5 sm:gap-2 rounded-xl border px-3 py-2 sm:px-4 sm:py-2.5 text-sm sm:text-base font-bold transition-all ${status === "online"
                   ? "border-skeuo-surface bg-white text-skeuo-text hover:border-skeuo-red/30 hover:bg-skeuo-red/5 hover:text-skeuo-red"
                   : "border-transparent bg-skeuo-green text-white shadow-md hover:bg-green-600 hover:shadow-lg"
-              }`}
+                }`}
             >
               <Power size={16} className={status === "online" ? "group-hover:animate-pulse" : ""} />
               <span className="hidden sm:inline">{status === "online" ? "Go Offline" : "Go Online"}</span>
@@ -575,7 +575,7 @@ export default function DashboardPage() {
 
       {/* ================= Main Layout ================= */}
       <main className="mx-auto w-full max-w-7xl grid grid-cols-1 gap-4 px-2 py-4 sm:gap-6 sm:px-6 sm:py-8 lg:grid-cols-[1fr_400px] lg:px-8">
-        
+
         {/* ================= Left Column: Active Queue ================= */}
         <div className="flex flex-col gap-4 sm:gap-6">
           <Section

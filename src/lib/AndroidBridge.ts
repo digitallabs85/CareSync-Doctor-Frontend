@@ -9,6 +9,9 @@ declare global {
     DoctorStatus?: {
       postMessage: (message: string) => void;
     };
+    Logout?: {
+      postMessage: (message: string) => void;
+    };
   }
 }
 
@@ -34,9 +37,16 @@ function notifyDoctorStatus(status: "online" | "offline"): void {
   }
 }
 
+function notifyLogout(): void {
+  if (typeof window !== "undefined" && window.Logout) {
+    window.Logout.postMessage("logout");
+  }
+}
+
 export const AndroidBridge = {
   isAvailable: isAndroidBridgeAvailable,
   notifyCallEnded,
   notifyLoggedIn,
   notifyDoctorStatus,
+  notifyLogout,
 };
