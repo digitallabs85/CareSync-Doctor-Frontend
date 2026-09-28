@@ -40,24 +40,28 @@ export const PatientInfoModal = ({ onClose, vitalsId, embedded = false }: Patien
   const content = (
     <>
       {!embedded && (
-        <div className="bg-[#0297d6] px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-skeuo-surface bg-white/90 backdrop-blur-md px-4 py-4 sm:px-6 sm:py-5 rounded-t-[2rem]">
           <div>
-            <h2 className="text-white font-bold text-lg">Patient Information</h2>
+            <h2 className="text-lg sm:text-xl font-black text-skeuo-text">
+              Patient Information
+            </h2>
             {patient?.token && (
-              <p className="text-blue-100 text-xs mt-0.5">Token #{patient.token}</p>
+              <p className="mt-1 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-skeuo-muted">
+                Token #{patient.token}
+              </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="text-white/80 hover:text-white transition-colors"
+            className="rounded-xl p-2 text-skeuo-muted transition-colors hover:bg-skeuo-surface hover:text-skeuo-text"
           >
             <X size={20} />
           </button>
         </div>
       )}
 
-      {/* Tabs */}
-      <div className="flex border-b border-slate-100">
+      {/* ================= Tabs ================= */}
+      <div className="flex border-b border-skeuo-surface px-2 sm:px-4">
         {([
           { key: 'demographics', label: 'Demographics', icon: User },
           { key: 'vitals', label: 'Vitals', icon: Activity },
@@ -65,27 +69,30 @@ export const PatientInfoModal = ({ onClose, vitalsId, embedded = false }: Patien
           <button
             key={key}
             onClick={() => setActiveTab(key)}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-bold transition-colors border-b-2 ${activeTab === key
-              ? 'border-[#0297d6] text-[#0297d6]'
-              : 'border-transparent text-slate-400 hover:text-slate-600'
+            className={`flex flex-1 items-center justify-center gap-2 border-b-2 py-4 text-xs sm:text-sm font-bold uppercase tracking-widest transition-colors ${activeTab === key
+                ? 'border-skeuo-red text-skeuo-red'
+                : 'border-transparent text-skeuo-muted hover:text-skeuo-text'
               }`}
           >
-            <Icon size={15} />
+            <Icon size={16} />
             {label}
           </button>
         ))}
       </div>
 
-      {/* Content */}
-      <div className="p-6 max-h-[60vh] overflow-y-auto">
+      {/* ================= Content ================= */}
+      <div className="max-h-[60vh] overflow-y-auto p-4 sm:p-6">
         {reportLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <span className="w-6 h-6 border-2 border-[#0297d6] border-t-transparent rounded-full animate-spin" />
+          <div className="flex flex-col items-center justify-center py-12 gap-3">
+            <span className="h-7 w-7 sm:h-8 sm:w-8 animate-spin rounded-full border-2 border-skeuo-red border-t-transparent" />
+            <span className="text-sm font-bold text-skeuo-muted">Loading data...</span>
           </div>
         ) : !patient ? (
-          <p className="text-center text-slate-400 text-sm py-8">No patient data available.</p>
+          <p className="py-8 text-center text-sm font-bold text-skeuo-muted">
+            No patient data available.
+          </p>
         ) : activeTab === 'demographics' ? (
-          <div className="space-y-3">
+          <div className="space-y-1">
             {[
               { label: 'Full Name', value: `${patient.firstName ?? '—'} ${patient.lastName ?? ''}`.trim() },
               { label: 'Age', value: patient.age ? `${patient.age} years` : '—' },
@@ -93,16 +100,18 @@ export const PatientInfoModal = ({ onClose, vitalsId, embedded = false }: Patien
               { label: 'Phone', value: patient.phoneNumber ?? '—' },
               { label: 'City', value: patient.city ?? '—' },
             ].map(({ label, value }) => (
-              <div key={label} className="flex justify-between items-start gap-4 py-2.5 border-b border-slate-50 last:border-0">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider w-32 shrink-0">
+              <div key={label} className="flex items-start justify-between gap-4 border-b border-skeuo-surface/50 py-3 last:border-0">
+                <span className="w-24 sm:w-32 shrink-0 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-skeuo-muted">
                   {label}
                 </span>
-                <span className="text-sm text-slate-700 font-medium text-right">{value}</span>
+                <span className="text-right text-sm sm:text-base font-bold text-skeuo-text">
+                  {value}
+                </span>
               </div>
             ))}
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-1">
             {[
               { label: 'Temperature', value: formattedTemp?.value, unit: formattedTemp?.unit },
               { label: 'Blood Pressure', value: vitalsFromReport?.systolic && vitalsFromReport?.diastolic ? `${vitalsFromReport.systolic}/${vitalsFromReport.diastolic}` : null, unit: 'mmHg' },
@@ -111,16 +120,16 @@ export const PatientInfoModal = ({ onClose, vitalsId, embedded = false }: Patien
               { label: 'Height', value: formattedHeight?.value, unit: formattedHeight?.unit },
               { label: 'SpO2', value: vitalsFromReport?.bloodOxygen, unit: '%' },
             ].map(({ label, value, unit }) => (
-              <div key={label} className="flex justify-between items-center py-2.5 border-b border-slate-50 last:border-0">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              <div key={label} className="flex items-center justify-between border-b border-skeuo-surface/50 py-3 last:border-0">
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-skeuo-muted">
                   {label}
                 </span>
-                <span className={`text-sm font-bold ${value ? 'text-slate-800' : 'text-slate-300'}`}>
+                <span className={`text-sm sm:text-base font-black ${value ? 'text-skeuo-text' : 'text-skeuo-surface'}`}>
                   {value ? `${value} ${unit}` : '—'}
                 </span>
               </div>
             ))}
-            <p className="text-xs text-slate-400 text-center pt-2">
+            <p className="mt-4 text-center text-[10px] sm:text-xs font-bold uppercase tracking-widest text-skeuo-muted/70">
               Last recorded vitals before consultation
             </p>
           </div>
@@ -132,9 +141,9 @@ export const PatientInfoModal = ({ onClose, vitalsId, embedded = false }: Patien
   if (embedded) return content;
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md z-10 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={onClose} />
+      <div className="relative z-10 w-full max-w-md rounded-[2rem] bg-white shadow-2xl animate-fade-in overflow-hidden">
         {content}
       </div>
     </div>

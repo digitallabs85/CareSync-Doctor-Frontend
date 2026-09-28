@@ -15,29 +15,43 @@ export function ConsultModal({ onClose, patientId, patientToken, vitalsId }: Con
   const [tab, setTab] = useState<"info" | "prescription">("info");
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 bg-white rounded-[2rem] shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white z-10 flex items-center justify-between px-6 pt-6 pb-2 border-b border-slate-100 rounded-t-[2rem]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={onClose} />
+      <div className="relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] bg-white shadow-2xl animate-fade-in">
+        
+        {/* ================= Header Tabs ================= */}
+        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-skeuo-surface bg-white/90 backdrop-blur-md px-4 py-4 sm:px-6 sm:py-5 rounded-t-[2rem]">
           <div className="flex gap-2">
             <button
               onClick={() => setTab("info")}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase ${tab === "info" ? "bg-[#0297d6] text-white" : "bg-slate-100 text-slate-500"}`}
+              className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all ${
+                tab === "info" 
+                  ? "bg-skeuo-red text-white shadow-md shadow-skeuo-red/20" 
+                  : "bg-skeuo-base/50 text-skeuo-muted hover:bg-skeuo-surface hover:text-skeuo-text"
+              }`}
             >
-              <User size={14} /> Info
+              <User size={16} /> Info
             </button>
             <button
               onClick={() => setTab("prescription")}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase ${tab === "prescription" ? "bg-[#0297d6] text-white" : "bg-slate-100 text-slate-500"}`}
+              className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all ${
+                tab === "prescription" 
+                  ? "bg-skeuo-red text-white shadow-md shadow-skeuo-red/20" 
+                  : "bg-skeuo-base/50 text-skeuo-muted hover:bg-skeuo-surface hover:text-skeuo-text"
+              }`}
             >
-              <Pill size={14} /> Prescription
+              <Pill size={16} /> Prescription
             </button>
           </div>
-          <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-700">
-            <X size={18} />
+          <button 
+            onClick={onClose} 
+            className="rounded-xl p-2 text-skeuo-muted transition-colors hover:bg-skeuo-surface hover:text-skeuo-text"
+          >
+            <X size={20} />
           </button>
         </div>
 
+        {/* ================= Embedded Content ================= */}
         {tab === "info" ? (
           <PatientInfoModal vitalsId={vitalsId} onClose={onClose} embedded />
         ) : (
