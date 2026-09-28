@@ -196,7 +196,7 @@ export default function DashboardPage() {
             <button
               onClick={toggleStatus}
               className={`group flex items-center gap-1.5 sm:gap-2 rounded-xl border px-3 py-2 sm:px-4 sm:py-2.5 text-sm sm:text-base font-bold transition-all ${status === "online"
-                ? "border-skeuo-surface bg-white text-skeuo-text hover:border-skeuo-red/30 hover:bg-skeuo-red/5 hover:text-skeuo-red"
+                ? "border-skeuo-surface bg-skeuo-red text-skeuo-text hover:border-skeuo-red/30 hover:bg-skeuo-red/5 hover:text-skeuo-red"
                 : "border-transparent bg-skeuo-green text-white shadow-md hover:bg-green-600 hover:shadow-lg"
                 }`}
             >
@@ -260,7 +260,7 @@ export default function DashboardPage() {
                       className="group flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 rounded-lg bg-skeuo-red px-4 text-sm sm:text-base font-bold text-white transition-all hover:bg-skeuo-red-dark hover:shadow-lg hover:shadow-skeuo-red/20">
 
                       <Pill size={16} />
-                      
+
                       <span className="hidden sm:inline">Start Consult</span>
                     </button>
                   </div>
