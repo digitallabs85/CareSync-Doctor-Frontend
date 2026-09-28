@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Users, CheckCircle, Video, Activity, BellOff, Power, RefreshCw } from "lucide-react";
+import { LogOut, Users, CheckCircle, Video, Activity, BellOff, Power, RefreshCw, Pill } from "lucide-react";
 import { authService, doctorService, notificationService } from "@/lib/apiService";
 import { ConsultModal } from "../components/ConsultModal";
 import { AndroidBridge } from "@/lib/AndroidBridge";
@@ -259,7 +259,7 @@ export default function DashboardPage() {
                       onClick={() => setConsultItem(item)}
                       className="group flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 rounded-lg bg-skeuo-red px-4 text-sm sm:text-base font-bold text-white transition-all hover:bg-skeuo-red-dark hover:shadow-lg hover:shadow-skeuo-red/20"
                     >
-                      <Video size={16} />
+                      <Pill size={16} />
                       <span className="hidden sm:inline">Start Consult</span>
                     </button>
                   </div>
