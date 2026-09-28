@@ -53,7 +53,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-skeuo-base px-4 py-6 sm:px-6 sm:py-12 lg:px-8 relative overflow-hidden">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-skeuo-base px-4 py-8 sm:px-6 sm:py-12 lg:px-8 relative overflow-hidden">
             
             {/* Subtle background ambient mesh to make the frosted shell pop */}
             <div className="absolute inset-0 z-0 opacity-40 mix-blend-multiply">

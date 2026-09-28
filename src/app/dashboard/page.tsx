@@ -196,7 +196,7 @@ export default function DashboardPage() {
             <button
               onClick={toggleStatus}
               className={`group flex items-center gap-1.5 sm:gap-2 rounded-xl border px-3 py-2 sm:px-4 sm:py-2.5 text-sm sm:text-base font-bold transition-all ${status === "online"
-                ? "border-skeuo-surface bg-skeuo-red text-skeuo-text hover:border-skeuo-red/30 hover:bg-skeuo-red/5 hover:text-skeuo-red"
+                ? "border-skeuo-surface bg-skeuo-red text-white hover:border-skeuo-red/30 hover:bg-skeuo-red/5 hover:text-skeuo-red"
                 : "border-transparent bg-skeuo-green text-white shadow-md hover:bg-green-600 hover:shadow-lg"
                 }`}
             >
