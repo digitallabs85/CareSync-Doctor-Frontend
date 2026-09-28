@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Mic, MicOff, Video, VideoOff, PhoneOff, User, FileText } from "lucide-react";
+import { Mic, MicOff, Video, VideoOff, PhoneOff, User, FileText, Menu, ChevronDown } from "lucide-react";
 import type { IAgoraRTCClient, IMicrophoneAudioTrack, ICameraVideoTrack } from "agora-rtc-sdk-ng";
 import { consultService, notificationService, vitalsService } from "@/lib/apiService";
 import { PatientInfoModal } from "@/app/components/PatientInfoModal";
@@ -28,6 +28,8 @@ export default function ActiveCallPage() {
   const [isPrescriptionOpen, setIsPrescriptionOpen] = useState(false);
   const [patientId, setPatientId] = useState<string | undefined>();
   const [patientToken, setPatientToken] = useState<string | undefined>();
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     vitalsService.getPatientByVitalsId(vitalsId)
@@ -141,8 +143,8 @@ export default function ActiveCallPage() {
       {/* ================= Remote Video (Main Canvas) ================= */}
       <div className="relative flex-1 overflow-hidden bg-[#0A0A0A]">
         {/* The actual video element container */}
-        <div 
-          ref={remoteVideoRef} 
+        <div
+          ref={remoteVideoRef}
           className="absolute inset-0 h-full w-full [&>video]:h-full [&>video]:w-full [&>video]:object-cover"
         />
 
@@ -164,7 +166,7 @@ export default function ActiveCallPage() {
       </div>
 
       {/* ================= Local Video (PIP) ================= */}
-      {/* Floating glass pane slightly elevated above the bottom controls */}
+      {/* Floating glass pane pushed to the bottom right corner */}
       <div className="absolute bottom-32 right-4 z-30 overflow-hidden rounded-2xl bg-slate-900 shadow-2xl ring-2 ring-white/20 sm:bottom-8 sm:right-8 sm:rounded-3xl">
         <div
           ref={localVideoRef}
@@ -172,44 +174,64 @@ export default function ActiveCallPage() {
         />
       </div>
 
-      {/* ================= Top Left Actions ================= */}
-      <div className="absolute left-4 top-6 z-30 flex flex-col gap-3 sm:left-6 sm:top-8">
+      {/* ================= Top Left Actions Dropdown ================= */}
+      <div className="absolute left-4 top-6 z-40 sm:left-6 sm:top-8">
+
+        {/* Dropdown Trigger */}
         <button
-          onClick={() => setIsPatientInfoOpen(true)}
-          className="group flex items-center gap-3 rounded-2xl bg-black/40 p-2 pr-4 backdrop-blur-xl ring-1 ring-white/10 transition-all hover:bg-black/60 hover:ring-white/30"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="group flex items-center gap-2.5 rounded-2xl bg-black/40 p-2 pr-4 backdrop-blur-xl ring-1 ring-white/10 transition-all hover:bg-black/60 hover:ring-white/30"
         >
           <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-white transition-colors group-hover:bg-white/20">
-            <User size={18} />
+            <Menu size={18} />
           </div>
           <span className="text-xs font-bold uppercase tracking-widest text-white">
-            Patient Info
+            Actions
           </span>
+          <ChevronDown
+            size={14}
+            className={`ml-1 text-white/50 transition-transform duration-300 ${isMenuOpen ? "rotate-180" : ""}`}
+          />
         </button>
-        
-        <button
-          onClick={() => setIsPrescriptionOpen(true)}
-          className="group flex items-center gap-3 rounded-2xl bg-black/40 p-2 pr-4 backdrop-blur-xl ring-1 ring-white/10 transition-all hover:bg-black/60 hover:ring-white/30"
-        >
-          <div className="grid h-10 w-10 place-items-center rounded-xl bg-skeuo-red text-white shadow-lg shadow-skeuo-red/20 transition-transform group-hover:scale-105">
-            <FileText size={18} />
+
+        {/* Dropdown Menu (Scalable for future modals) */}
+        {isMenuOpen && (
+          <div className="absolute left-0 top-full mt-2 w-56 overflow-hidden rounded-2xl bg-black/60 p-1.5 shadow-2xl backdrop-blur-2xl ring-1 ring-white/10 animate-fade-in">
+            <button
+              onClick={() => {
+                setIsPatientInfoOpen(true);
+                setIsMenuOpen(false);
+              }}
+              className="flex w-full items-center gap-3 rounded-xl p-3 text-left transition-colors hover:bg-white/10"
+            >
+              <User size={16} className="text-white/70 shrink-0" />
+              <span className="text-xs font-bold uppercase tracking-widest text-white">Patient Info</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setIsPrescriptionOpen(true);
+                setIsMenuOpen(false);
+              }}
+              className="flex w-full items-center gap-3 rounded-xl p-3 text-left transition-colors hover:bg-white/10"
+            >
+              <FileText size={16} className="text-skeuo-red shrink-0" />
+              <span className="text-xs font-bold uppercase tracking-widest text-white">Prescription</span>
+            </button>
           </div>
-          <span className="text-xs font-bold uppercase tracking-widest text-white">
-            Prescription
-          </span>
-        </button>
+        )}
       </div>
 
       {/* ================= Bottom Control Dock ================= */}
       <div className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-4 rounded-[2.5rem] bg-black/50 px-6 py-4 shadow-2xl backdrop-blur-xl ring-1 ring-white/10 sm:bottom-8 sm:gap-6 sm:px-8">
-        
+
         {/* Toggle Mic */}
         <button
           onClick={handleToggleMic}
-          className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-all ${
-            micOn 
-              ? "bg-white/20 text-white hover:bg-white/30" 
+          className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-all ${micOn
+              ? "bg-white/20 text-white hover:bg-white/30"
               : "bg-white text-skeuo-text shadow-[0_0_15px_rgba(255,255,255,0.3)]"
-          }`}
+            }`}
         >
           {micOn ? <Mic size={20} /> : <MicOff size={22} className="text-rose-500" />}
         </button>
@@ -231,16 +253,23 @@ export default function ActiveCallPage() {
         {/* Toggle Cam */}
         <button
           onClick={handleToggleCam}
-          className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-all ${
-            camOn 
-              ? "bg-white/20 text-white hover:bg-white/30" 
+          className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-all ${camOn
+              ? "bg-white/20 text-white hover:bg-white/30"
               : "bg-white text-skeuo-text shadow-[0_0_15px_rgba(255,255,255,0.3)]"
-          }`}
+            }`}
         >
           {camOn ? <Video size={20} /> : <VideoOff size={22} className="text-rose-500" />}
         </button>
-
       </div>
+
+      {/* ================= Close Menu Overlay (Invisible) ================= */}
+      {/* Clicking anywhere else on the screen will close the dropdown menu */}
+      {isMenuOpen && (
+        <div
+          className="absolute inset-0 z-30"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
     </div>
-);
+  );
 }

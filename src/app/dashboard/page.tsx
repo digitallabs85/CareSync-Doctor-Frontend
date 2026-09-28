@@ -257,9 +257,10 @@ export default function DashboardPage() {
                     </div>
                     <button
                       onClick={() => setConsultItem(item)}
-                      className="group flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 rounded-lg bg-skeuo-red px-4 text-sm sm:text-base font-bold text-white transition-all hover:bg-skeuo-red-dark hover:shadow-lg hover:shadow-skeuo-red/20"
-                    >
+                      className="group flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 rounded-lg bg-skeuo-red px-4 text-sm sm:text-base font-bold text-white transition-all hover:bg-skeuo-red-dark hover:shadow-lg hover:shadow-skeuo-red/20">
+
                       <Pill size={16} />
+                      
                       <span className="hidden sm:inline">Start Consult</span>
                     </button>
                   </div>
