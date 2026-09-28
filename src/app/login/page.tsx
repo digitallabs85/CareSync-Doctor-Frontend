@@ -53,12 +53,12 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col justify-center bg-white px-2 py-6 sm:px-6 sm:py-12 lg:px-8">
-            <div className="mx-auto w-full max-w-md">
+        <div className="flex min-h-screen items-center justify-center bg-skeuo-base px-2 py-6 sm:px-6 sm:py-12 lg:px-8">
+            <div className="w-full max-w-md overflow-hidden rounded-xl border border-skeuo-surface bg-white shadow-2xl">
                 
-                {/* ================= Cardless Header ================= */}
-                <div className="flex flex-col items-start px-2 py-6 sm:px-10 sm:pb-6 sm:pt-10">
-                    <div className="mb-6 grid h-16 w-16 place-items-center rounded-2xl bg-skeuo-base/50 p-2">
+                {/* ================= Header Branding ================= */}
+                <div className="flex flex-col items-center border-b border-skeuo-surface bg-skeuo-base/40 px-2 py-6 text-center sm:px-8 sm:py-10">
+                    <div className="mb-4 grid h-20 w-20 place-items-center rounded-2xl border border-skeuo-surface bg-white p-2 shadow-sm">
                         <Image 
                             src={logo} 
                             alt={`${config.app} Logo`} 
@@ -66,20 +66,20 @@ export default function LoginPage() {
                             priority
                         />
                     </div>
-                    <h1 className="text-3xl font-black tracking-tight text-skeuo-text">
-                        Welcome back.
+                    <h1 className="text-2xl font-black tracking-tight text-skeuo-text">
+                        {config.app}
                     </h1>
-                    <p className="mt-2 text-base font-medium text-skeuo-muted">
-                        Sign in to the {config.app} doctor portal to manage your consultations.
+                    <p className="mt-1 text-sm font-bold uppercase tracking-widest text-skeuo-muted">
+                        Doctor Portal
                     </p>
                 </div>
 
-                {/* ================= Open Form ================= */}
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-2 py-6 sm:px-10 sm:py-6">
+                {/* ================= Login Form ================= */}
+                <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-2 py-6 sm:px-10 sm:py-10">
                     
                     {/* Email Input */}
                     <div>
-                        <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-skeuo-text">
+                        <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-skeuo-muted">
                             Email Address
                         </label>
                         <div className="group relative">
@@ -97,7 +97,7 @@ export default function LoginPage() {
 
                     {/* Password Input */}
                     <div>
-                        <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-skeuo-text">
+                        <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-skeuo-muted">
                             Password
                         </label>
                         <div className="group relative">
@@ -133,7 +133,7 @@ export default function LoginPage() {
                     <button
                         type="submit"
                         disabled={loading || !email || !password}
-                        className="group relative mt-4 flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-skeuo-red py-4 text-base font-bold text-white shadow-md transition-all hover:bg-skeuo-red-dark hover:shadow-lg hover:shadow-skeuo-red/20 disabled:pointer-events-none disabled:opacity-50"
+                        className="group relative mt-2 flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-skeuo-red py-4 text-base font-bold text-white shadow-md transition-all hover:bg-skeuo-red-dark hover:shadow-lg hover:shadow-skeuo-red/20 disabled:pointer-events-none disabled:opacity-50"
                     >
                         {loading ? (
                             <>
@@ -146,15 +146,12 @@ export default function LoginPage() {
                     </button>
                     
                 </form>
-
-                {/* Footer note pulled into the main flow */}
-                <div className="px-2 py-6 sm:px-10">
-                    <p className="text-sm font-medium text-skeuo-muted">
-                        Authorized clinical personnel only. If you need access, contact your system administrator.
-                    </p>
-                </div>
-
             </div>
+            
+            {/* Minimal footer note */}
+            <p className="fixed bottom-6 text-xs font-medium text-skeuo-muted">
+                Authorized clinical personnel only.
+            </p>
         </div>
     );
 }
