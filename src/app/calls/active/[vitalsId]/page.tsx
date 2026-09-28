@@ -123,7 +123,8 @@ export default function ActiveCallPage() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-black">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#050505]">
+      {/* ================= Modals ================= */}
       {isPatientInfoOpen && (
         <PatientInfoModal onClose={() => setIsPatientInfoOpen(false)} vitalsId={vitalsId} />
       )}
@@ -137,55 +138,109 @@ export default function ActiveCallPage() {
         />
       )}
 
-      <div ref={remoteVideoRef} className="relative flex-1 bg-slate-900">
+      {/* ================= Remote Video (Main Canvas) ================= */}
+      <div className="relative flex-1 overflow-hidden bg-[#0A0A0A]">
+        {/* The actual video element container */}
+        <div 
+          ref={remoteVideoRef} 
+          className="absolute inset-0 h-full w-full [&>video]:h-full [&>video]:w-full [&>video]:object-cover"
+        />
+
+        {/* Waiting State */}
         {!remoteUserJoined && (
-          <div className="absolute inset-0 flex items-center justify-center text-slate-400">
-            {joined ? "Waiting for patient to join..." : "Connecting..."}
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0A0A0A] backdrop-blur-sm">
+            <div className="relative mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10">
+              <span className="absolute inset-0 animate-ping rounded-full bg-white/10"></span>
+              <User size={32} className="text-white/40" />
+            </div>
+            <p className="text-lg font-bold tracking-wide text-white">
+              {joined ? "Waiting for patient to join..." : "Connecting securely..."}
+            </p>
+            <p className="mt-2 text-sm font-medium text-white/50">
+              Please keep this window open.
+            </p>
           </div>
         )}
       </div>
 
-      <div
-        ref={localVideoRef}
-        className="absolute bottom-24 right-4 h-40 w-28 overflow-hidden rounded-lg border-2 border-white/20 bg-slate-800"
-      />
+      {/* ================= Local Video (PIP) ================= */}
+      {/* Floating glass pane slightly elevated above the bottom controls */}
+      <div className="absolute bottom-32 right-4 z-30 overflow-hidden rounded-2xl bg-slate-900 shadow-2xl ring-2 ring-white/20 sm:bottom-8 sm:right-8 sm:rounded-3xl">
+        <div
+          ref={localVideoRef}
+          className="h-44 w-32 bg-slate-800 sm:h-56 sm:w-40 [&>video]:h-full [&>video]:w-full [&>video]:object-cover"
+        />
+      </div>
 
-      <div className="absolute top-5 left-3 z-20 flex flex-col gap-2">
+      {/* ================= Top Left Actions ================= */}
+      <div className="absolute left-4 top-6 z-30 flex flex-col gap-3 sm:left-6 sm:top-8">
         <button
           onClick={() => setIsPatientInfoOpen(true)}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-700 text-white"
+          className="group flex items-center gap-3 rounded-2xl bg-black/40 p-2 pr-4 backdrop-blur-xl ring-1 ring-white/10 transition-all hover:bg-black/60 hover:ring-white/30"
         >
-          <User size={18} />
+          <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-white transition-colors group-hover:bg-white/20">
+            <User size={18} />
+          </div>
+          <span className="text-xs font-bold uppercase tracking-widest text-white">
+            Patient Info
+          </span>
         </button>
+        
         <button
           onClick={() => setIsPrescriptionOpen(true)}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0297d6] text-white"
+          className="group flex items-center gap-3 rounded-2xl bg-black/40 p-2 pr-4 backdrop-blur-xl ring-1 ring-white/10 transition-all hover:bg-black/60 hover:ring-white/30"
         >
-          <FileText size={18} />
+          <div className="grid h-10 w-10 place-items-center rounded-xl bg-skeuo-red text-white shadow-lg shadow-skeuo-red/20 transition-transform group-hover:scale-105">
+            <FileText size={18} />
+          </div>
+          <span className="text-xs font-bold uppercase tracking-widest text-white">
+            Prescription
+          </span>
         </button>
       </div>
 
-      <div className="flex items-center justify-center gap-6 bg-black/80 py-6">
+      {/* ================= Bottom Control Dock ================= */}
+      <div className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-4 rounded-[2.5rem] bg-black/50 px-6 py-4 shadow-2xl backdrop-blur-xl ring-1 ring-white/10 sm:bottom-8 sm:gap-6 sm:px-8">
+        
+        {/* Toggle Mic */}
         <button
           onClick={handleToggleMic}
-          className={`flex h-14 w-14 items-center justify-center rounded-full ${micOn ? "bg-slate-700" : "bg-red-600"} text-white`}
+          className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-all ${
+            micOn 
+              ? "bg-white/20 text-white hover:bg-white/30" 
+              : "bg-white text-skeuo-text shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+          }`}
         >
-          {micOn ? <Mic size={22} /> : <MicOff size={22} />}
+          {micOn ? <Mic size={20} /> : <MicOff size={22} className="text-rose-500" />}
         </button>
+
+        {/* End Call (Hero Button) */}
         <button
           onClick={handleEndCall}
           disabled={ending}
-          className="flex h-16 w-16 items-center justify-center rounded-full bg-red-600 text-white disabled:opacity-50"
+          className="group relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-skeuo-red text-white shadow-[0_8px_30px_rgba(220,38,38,0.4)] transition-all hover:bg-rose-700 hover:shadow-[0_8px_40px_rgba(220,38,38,0.6)] disabled:pointer-events-none disabled:opacity-50"
         >
-          <PhoneOff size={26} />
+          <div className="absolute inset-0 rounded-full border border-white/20"></div>
+          {ending ? (
+            <span className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent" />
+          ) : (
+            <PhoneOff size={28} className="transition-transform group-hover:scale-110" />
+          )}
         </button>
+
+        {/* Toggle Cam */}
         <button
           onClick={handleToggleCam}
-          className={`flex h-14 w-14 items-center justify-center rounded-full ${camOn ? "bg-slate-700" : "bg-red-600"} text-white`}
+          className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-all ${
+            camOn 
+              ? "bg-white/20 text-white hover:bg-white/30" 
+              : "bg-white text-skeuo-text shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+          }`}
         >
-          {camOn ? <Video size={22} /> : <VideoOff size={22} />}
+          {camOn ? <Video size={20} /> : <VideoOff size={22} className="text-rose-500" />}
         </button>
+
       </div>
     </div>
-  );
+);
 }
