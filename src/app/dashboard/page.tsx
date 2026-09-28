@@ -461,7 +461,7 @@ export default function DashboardPage() {
   const fetchQueue = useCallback(async () => {
     try {
       const data = await doctorService.getQueue();
-      setQueue(data);
+      setQueue((prev) => (JSON.stringify(prev) === JSON.stringify(data) ? prev : data));
     } catch (err) {
       console.error("Queue fetch failed:", err);
     } finally {
@@ -472,7 +472,7 @@ export default function DashboardPage() {
   const fetchCompleted = useCallback(async () => {
     try {
       const data = await doctorService.getCompletedToday();
-      setCompleted(data);
+      setCompleted((prev) => (JSON.stringify(prev) === JSON.stringify(data) ? prev : data));
     } catch (err) {
       console.error("Completed fetch failed:", err);
     } finally {
@@ -538,7 +538,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-skeuo-base">
       {/* ================= Header ================= */}
-      <header className="sticky top-0 z-40 border-b border-skeuo-surface bg-white/80 backdrop-blur-md px-3 py-3 sm:px-6 sm:py-4 lg:px-8">
+      <header className="sticky top-0 z-40 border-b border-skeuo-surface bg-white px-3 py-3 sm:px-6 sm:py-4 lg:px-8">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
           <div className="flex items-center gap-2.5 sm:gap-3">
             <Image src={logo} alt="logo" className="w-10 sm:w-12" />
@@ -554,8 +554,8 @@ export default function DashboardPage() {
             <button
               onClick={toggleStatus}
               className={`group flex items-center gap-1.5 sm:gap-2 rounded-xl border px-3 py-2 sm:px-4 sm:py-2.5 text-sm sm:text-base font-bold transition-all ${status === "online"
-                  ? "border-skeuo-surface bg-white text-skeuo-text hover:border-skeuo-red/30 hover:bg-skeuo-red/5 hover:text-skeuo-red"
-                  : "border-transparent bg-skeuo-green text-white shadow-md hover:bg-green-600 hover:shadow-lg"
+                ? "border-skeuo-surface bg-white text-skeuo-text hover:border-skeuo-red/30 hover:bg-skeuo-red/5 hover:text-skeuo-red"
+                : "border-transparent bg-skeuo-green text-white shadow-md hover:bg-green-600 hover:shadow-lg"
                 }`}
             >
               <Power size={16} className={status === "online" ? "group-hover:animate-pulse" : ""} />
