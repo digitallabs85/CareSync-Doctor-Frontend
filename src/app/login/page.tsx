@@ -62,10 +62,10 @@ export default function LoginPage() {
             </div>
 
             {/* ================= The "Shell" (Card Alternative) ================= */}
-            <div className="relative z-10 w-full max-w-md rounded-[2.5rem] bg-white/40 p-2 shadow-2xl shadow-black/5 ring-1 ring-white/60 backdrop-blur-xl sm:p-3">
+            <div className="relative z-10 w-full max-w-md rounded-xl bg-white/40 p-2 shadow-2xl shadow-black/5 ring-1 ring-white/60 backdrop-blur-xl sm:p-3">
                 
                 {/* Inner Crisp Container */}
-                <div className="w-full overflow-hidden rounded-[2rem] bg-white shadow-sm border border-skeuo-surface/50">
+                <div className="w-full overflow-hidden rounded-xl bg-white shadow-sm border border-skeuo-surface/50">
                     
                     {/* ================= Header Branding ================= */}
                     <div className="flex flex-col items-center bg-gradient-to-b from-skeuo-base/30 to-white px-2 py-6 text-center sm:px-8 sm:py-10">
