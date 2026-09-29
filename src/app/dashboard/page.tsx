@@ -1,13 +1,14 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Users, CheckCircle, Video, Activity, BellOff, Power, RefreshCw, Pill } from "lucide-react";
+import { LogOut, Users, CheckCircle, Video, Activity, BellOff, Power, RefreshCw, Pill, Menu, UserCog, Info, X } from "lucide-react";
 import { authService, doctorService, notificationService } from "@/lib/apiService";
 import { ConsultModal } from "../components/ConsultModal";
 import { AndroidBridge } from "@/lib/AndroidBridge";
 import logo from '../../../public/logo.png'
 import Image from "next/image";
 import { config } from "../../../config";
+import Link from "next/link";
 
 type QueueItem = {
   vitalsId: string;
@@ -67,6 +68,7 @@ export default function DashboardPage() {
   const [loggingOut, setLoggingOut] = useState(false);
   const [consultItem, setConsultItem] = useState<QueueItem | null>(null);
   const [notificationsBlocked, setNotificationsBlocked] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!("Notification" in window)) return;
@@ -180,12 +182,19 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-skeuo-base">
       {/* ================= Header ================= */}
-      <header className="sticky top-0 z-40 border-b border-skeuo-surface bg-white px-3 py-3 sm:px-6 sm:py-4 lg:px-8">
+      <header className="sticky top-0 z-40 border-b border-skeuo-surface bg-white px-2 py-3 sm:px-6 sm:py-4 lg:px-8">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <Image src={logo} alt="logo" className="w-10 sm:w-12" />
+          <div className="flex items-center gap-1.5 sm:gap-3">
+            <button
+              onClick={() => setMenuOpen(true)}
+              aria-label="Open menu"
+              className="rounded-lg p-2 text-skeuo-text transition-colors hover:bg-skeuo-surface md:hidden"
+            >
+              <Menu size={22} />
+            </button>
+            {/* <Image src={logo} alt="logo" className="w-10 sm:w-12" /> */}
             <div>
-              <h1 className="text-lg sm:text-xl font-black text-skeuo-text leading-tight">{config.app}</h1>
+              <h1 className="text-lg sm:text-xl font-black text-skeuo-text leading-tight">Doctor</h1>
               <p className={`text-xs sm:text-sm font-bold uppercase tracking-wider ${status === "online" ? "text-skeuo-green" : "text-skeuo-muted"}`}>
                 {status === "online" ? "Receiving Calls" : "Currently Offline"}
               </p>
@@ -193,6 +202,17 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <span className="hidden text-xs font-medium text-skeuo-muted md:inline">
+              v{config.version}
+            </span>
+
+            <Link
+              href="/profile"
+              className="hidden items-center gap-2 rounded-xl border border-skeuo-surface bg-white px-4 py-2.5 text-base font-bold text-skeuo-muted transition-all hover:border-skeuo-text hover:text-skeuo-text md:flex"
+            >
+              <UserCog size={16} /> Update Profile
+            </Link>
+
             <button
               onClick={toggleStatus}
               className={`group flex items-center gap-1.5 sm:gap-2 rounded-xl border px-3 py-2 sm:px-4 sm:py-2.5 text-sm sm:text-base font-bold transition-all ${status === "online"
@@ -203,13 +223,13 @@ export default function DashboardPage() {
               <Power size={16} className={status === "online" ? "group-hover:animate-pulse" : ""} />
               <span className="hidden sm:inline">{status === "online" ? "Go Offline" : "Go Online"}</span>
             </button>
+
             <button
               onClick={handleLogout}
               disabled={loggingOut}
-              className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-skeuo-surface bg-white px-3 py-2 sm:px-4 sm:py-2.5 text-sm sm:text-base font-bold text-skeuo-muted transition-all hover:border-skeuo-red/30 hover:bg-skeuo-red/5 hover:text-skeuo-red disabled:opacity-50"
+              className="hidden items-center gap-2 rounded-xl border border-skeuo-surface bg-white px-4 py-2.5 text-base font-bold text-skeuo-muted transition-all hover:border-skeuo-red/30 hover:bg-skeuo-red/5 hover:text-skeuo-red disabled:opacity-50 md:flex"
             >
-              <LogOut size={16} />
-              <span className="hidden sm:inline">{loggingOut ? "Logging out..." : "Logout"}</span>
+              <LogOut size={16} /> {loggingOut ? "Signing out..." : "Sign Out"}
             </button>
           </div>
         </div>
@@ -223,7 +243,7 @@ export default function DashboardPage() {
           <Section
             icon={<Users className="h-5 w-5" />}
             title="Active Patient Queue"
-            subtitle={`${queue.length} patient${queue.length !== 1 ? 's' : ''} waiting`}
+            subtitle={`${queue.length} patient${queue.length !== 1 ? "s" : ""} waiting`}
             action={
               <button onClick={fetchQueue} disabled={loading} className="rounded-lg p-1.5 sm:p-2 text-skeuo-muted transition-colors hover:bg-skeuo-surface hover:text-skeuo-text">
                 <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
@@ -251,16 +271,15 @@ export default function DashboardPage() {
                       <div className="min-w-0">
                         <p className="truncate text-base sm:text-lg font-bold text-skeuo-text">{item.patientName}</p>
                         <p className="mt-0.5 text-xs sm:text-sm font-medium text-skeuo-muted">
-                          Added: {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          Added: {new Date(item.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </p>
                       </div>
                     </div>
                     <button
                       onClick={() => setConsultItem(item)}
-                      className="group flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 rounded-lg bg-skeuo-red px-4 text-sm sm:text-base font-bold text-white transition-all hover:bg-skeuo-red-dark hover:shadow-lg hover:shadow-skeuo-red/20">
-
+                      className="group flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 rounded-lg bg-skeuo-red px-4 text-sm sm:text-base font-bold text-white transition-all hover:bg-skeuo-red-dark hover:shadow-lg hover:shadow-skeuo-red/20"
+                    >
                       <Pill size={16} />
-
                       <span className="hidden sm:inline">Start Consult</span>
                     </button>
                   </div>
@@ -275,7 +294,7 @@ export default function DashboardPage() {
           <Section
             icon={<CheckCircle className="h-5 w-5" />}
             title="Completed Today"
-            subtitle={`${completed.length} consult${completed.length !== 1 ? 's' : ''} finished`}
+            subtitle={`${completed.length} consult${completed.length !== 1 ? "s" : ""} finished`}
             className="h-full"
             bodyClassName="h-full flex flex-col"
             action={
@@ -323,6 +342,48 @@ export default function DashboardPage() {
           </Section>
         </div>
       </main>
+
+      {/* ================= Side Drawer ================= */}
+      <div
+        onClick={() => setMenuOpen(false)}
+        className={`fixed inset-0 z-50 bg-black/50 transition-opacity duration-300 md:hidden ${menuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
+      />
+      <aside
+        className={`fixed left-0 top-0 z-50 flex h-full w-72 max-w-[80%] flex-col bg-white shadow-2xl transition-transform duration-300 md:hidden ${menuOpen ? "translate-x-0" : "-translate-x-full"}`}
+      >
+        <div className="flex items-center justify-between border-b border-skeuo-surface px-4 py-4">
+          <div className="flex items-center gap-2.5">
+            <Image src={logo} alt="logo" className="w-10" />
+            <span className="text-lg font-black text-skeuo-text">{config.app}</span>
+          </div>
+          <button onClick={() => setMenuOpen(false)} aria-label="Close menu" className="rounded-lg p-2 text-skeuo-muted hover:bg-skeuo-surface">
+            <X size={20} />
+          </button>
+        </div>
+
+        <nav className="flex flex-1 flex-col gap-1 p-3">
+          <Link
+            href="/profile"
+            onClick={() => setMenuOpen(false)}
+            className="flex items-center gap-3 rounded-xl px-3 py-3 font-bold text-skeuo-text hover:bg-skeuo-surface"
+          >
+            <UserCog size={20} /> Update Profile
+          </Link>
+        </nav>
+
+        <div className="border-t border-skeuo-surface p-3">
+          <button
+            onClick={handleLogout}
+            disabled={loggingOut}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-3 font-bold text-skeuo-red hover:bg-skeuo-red/5 disabled:opacity-50"
+          >
+            <LogOut size={20} /> {loggingOut ? "Signing out..." : "Sign Out"}
+          </button>
+          <p className="mt-2 flex items-center gap-2 px-3 text-xs font-medium text-skeuo-muted">
+            <Info size={14} /> Version {process.env.NEXT_PUBLIC_APP_VERSION ?? "1.0.0"}
+          </p>
+        </div>
+      </aside>
 
       {/* ================= Consult Modal ================= */}
       {consultItem && (

@@ -9,12 +9,7 @@ const withPWA = withPWAInit({
   runtimeCaching: [
     {
       urlPattern: /^https:\/\/caresync-backend-mu\.vercel\.app\/api\/.*/i,
-      handler: "NetworkFirst",
-      options: {
-        cacheName: "api-cache",
-        expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 },
-        networkTimeoutSeconds: 5,
-      },
+      handler: "NetworkOnly",
     },
     {
       urlPattern: /\.(?:js|css|woff2?|png|jpg|jpeg|svg)$/i,
