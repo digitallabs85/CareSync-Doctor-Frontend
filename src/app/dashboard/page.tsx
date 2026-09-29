@@ -182,15 +182,15 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-skeuo-base">
       {/* ================= Header ================= */}
-      <header className="sticky top-0 z-40 border-b border-skeuo-surface bg-white px-2 py-3 sm:px-6 sm:py-4 lg:px-8">
+      <header className="sticky top-0 z-40 border-b border-skeuo-surface bg-white px-3 py-3 sm:px-6 sm:py-4 lg:px-8">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
-          <div className="flex items-center gap-1.5 sm:gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-3">
             <button
               onClick={() => setMenuOpen(true)}
               aria-label="Open menu"
-              className="rounded-lg p-2 text-skeuo-text transition-colors hover:bg-skeuo-surface md:hidden"
+              className="rounded-lg text-skeuo-text transition-colors hover:bg-skeuo-surface md:hidden"
             >
-              <Menu size={22} />
+              <Menu size={28} />
             </button>
             {/* <Image src={logo} alt="logo" className="w-10 sm:w-12" /> */}
             <div>
