@@ -62,7 +62,7 @@ export default function LoginPage() {
                 <div className="w-full overflow-hidden rounded-xl bg-white shadow-sm border border-skeuo-surface/50 py-12 sm:py-6">
 
                     {/* ================= Header Branding ================= */}
-                    <div className="flex flex-col items-center bg-white px-2 text-center sm:px-8 sm:pb-10">
+                    <div className="flex flex-col items-center bg-white px-2 text-center sm:px-8">
                         <Image
                             src={logo}
                             alt={`${config.app} Logo`}
@@ -83,7 +83,7 @@ export default function LoginPage() {
                     </div>
 
                     {/* ================= Login Form ================= */}
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-3 px-6 sm:px-10 sm:pt-10">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-3 px-6 sm:px-10">
 
                         {/* Email Input */}
                         <div>
