@@ -62,7 +62,6 @@ export default function DashboardPage() {
   const [completed, setCompleted] = useState<QueueItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingCompleted, setLoadingCompleted] = useState(true);
-  const [loggingOut, setLoggingOut] = useState(false);
   const [consultItem, setConsultItem] = useState<QueueItem | null>(null);
   const [notificationsBlocked, setNotificationsBlocked] = useState(false);
 
@@ -145,46 +144,11 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, [fetchQueue, fetchCompleted, router]);
 
-  async function toggleStatus() {
-    const next = status === "online" ? "offline" : "online";
-    try {
-      await doctorService.updateStatus(next);
-      setStatus(next);
-      AndroidBridge.notifyDoctorStatus(next);
-    } catch (err) {
-      console.error("Status update failed:", err);
-    }
-  }
-
-  async function handleLogout() {
-    setLoggingOut(true);
-    try {
-      const fcmToken = localStorage.getItem("fcmToken");
-      if (fcmToken) {
-        await notificationService.removeFcmToken(fcmToken);
-      }
-      await authService.logout("Manual logout");
-    } catch (err) {
-      console.error("Logout error:", err);
-    } finally {
-      AndroidBridge.notifyLogout();
-      localStorage.removeItem("doctorToken");
-      localStorage.removeItem("doctor");
-      localStorage.removeItem("fcmToken");
-      router.replace("/login");
-    }
-  }
-
   return (
     <div className="min-h-screen bg-skeuo-base">
       
       {/* ================= Extracted Navbar ================= */}
-      <Navbar 
-        status={status} 
-        loggingOut={loggingOut} 
-        onToggleStatus={toggleStatus} 
-        onLogout={handleLogout} 
-      />
+      <Navbar status={status} setStatus={setStatus} />
 
       {/* ================= Main Layout ================= */}
       <main className="mx-auto w-full max-w-7xl grid grid-cols-1 gap-4 px-2 py-4 sm:gap-6 sm:px-6 sm:py-8 lg:grid-cols-[1fr_400px] lg:px-8">
