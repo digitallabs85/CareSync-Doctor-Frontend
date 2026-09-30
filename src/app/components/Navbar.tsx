@@ -32,7 +32,7 @@ export default function Navbar({
                         <button
                             onClick={() => setMenuOpen(true)}
                             aria-label="Open menu"
-                            className="grid h-8 w-8 place-items-center rounded-lg bg-skeuo-surface/50 text-skeuo-text transition-all active:scale-95 md:hidden"
+                            className="grid h-9 w-9 place-items-center rounded-lg bg-skeuo-surface/50 text-skeuo-text transition-all active:scale-95 md:hidden"
                         >
                             <Menu size={25} />
                         </button>

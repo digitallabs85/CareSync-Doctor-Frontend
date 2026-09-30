@@ -1,10 +1,13 @@
 import type { NextConfig } from "next";
 import withPWAInit from "next-pwa";
 
+const isDev = process.env.NODE_ENV === "development";
+
 const withPWA = withPWAInit({
   dest: "public",
   register: false,
   skipWaiting: true,
+  disable: isDev, // Completely disables PWA generation in local development
   importScripts: ["firebase-messaging-sw.js"],
   runtimeCaching: [
     {
@@ -26,12 +29,5 @@ const nextConfig: NextConfig = {
   /* your existing config options here */
 };
 
-export default withPWA(nextConfig);
-
-// import type { NextConfig } from "next";
-
-// const nextConfig: NextConfig = {
-//   /* your existing config options here */
-// };
-
-// export default nextConfig;
+// If in development, export normal config. If in production, wrap it in PWA.
+export default isDev ? nextConfig : withPWA(nextConfig);
