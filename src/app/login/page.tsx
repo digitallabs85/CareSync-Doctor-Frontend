@@ -53,16 +53,16 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-skeuo-base px-2 py-8 sm:px-6 sm:py-12 lg:px-8 relative overflow-hidden">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-skeuo-base px-3 py-8 sm:px-6 sm:py-12 lg:px-8 relative overflow-hidden">
                 
 
             {/* ================= The "Shell" (Card Alternative) ================= */}
             <div className="w-full max-w-md">
                 {/* Inner Crisp Container */}
-                <div className="w-full overflow-hidden rounded-xl bg-white shadow-sm border border-skeuo-surface/50">
+                <div className="w-full overflow-hidden rounded-xl bg-white shadow-sm border border-skeuo-surface/50 py-12 sm:py-6">
                     
                     {/* ================= Header Branding ================= */}
-                    <div className="flex flex-col items-center bg-gradient-to-b from-skeuo-base/30 to-white px-2 py-4 text-center sm:px-8 sm:py-10">
+                    <div className="flex flex-col items-center bg-white px-2 pb-4 text-center sm:px-8 sm:py-10">
                         <div className="mb-4 grid h-20 w-20 place-items-center rounded-2xl border border-skeuo-surface/60 bg-white p-2 shadow-sm">
                             <Image 
                                 src={logo} 
@@ -85,7 +85,7 @@ export default function LoginPage() {
                     </div>
 
                     {/* ================= Login Form ================= */}
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-4 py-6 sm:px-10 sm:py-10">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-4 pt-6 sm:px-10 sm:py-10">
                         
                         {/* Email Input */}
                         <div>
