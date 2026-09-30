@@ -32,24 +32,20 @@ export default function Navbar({
                         <button
                             onClick={() => setMenuOpen(true)}
                             aria-label="Open menu"
-                            className="grid h-10 w-10 place-items-center rounded-xl bg-skeuo-surface/50 text-skeuo-text transition-all active:scale-95 md:hidden"
+                            className="grid h-8 w-8 place-items-center rounded-lg bg-skeuo-surface/50 text-skeuo-text transition-all active:scale-95 md:hidden"
                         >
                             <Menu size={22} />
                         </button>
                         
-                        {/* <div className="hidden shrink-0 sm:block">
-                            <Image src={logo} alt="logo" className="w-10 sm:w-12 drop-shadow-sm" />
-                        </div> */}
-                        
                         <div className="flex flex-col gap-1">
-                            <h1 className="text-lg font-black tracking-tight text-skeuo-text sm:text-xl leading-none">
+                            <h1 className="text-xl font-black tracking-tight text-skeuo-text sm:text-xl leading-none">
                                 Doctor
                             </h1>
                             <div className="flex items-center gap-1.5">
-                                <div className={`flex items-center gap-1.5 rounded-lg px-2 py-0.2 text-[10px] font-black uppercase tracking-widest ${
+                                <div className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest ${
                                     status === "online" 
-                                        ? "bg-skeuo-green/10 text-skeuo-green" 
-                                        : "bg-skeuo-surface text-skeuo-muted"
+                                        ? " text-skeuo-green" 
+                                        : " text-skeuo-muted"
                                 }`}>
                                     <span className={`h-1.5 w-1.5 rounded-full ${status === "online" ? "animate-pulse bg-skeuo-green" : "bg-skeuo-muted"}`} />
                                     {status === "online" ? "Receiving Calls" : "Offline"}
