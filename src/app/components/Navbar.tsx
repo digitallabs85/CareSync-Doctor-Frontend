@@ -41,12 +41,12 @@ export default function Navbar({
                             <Image src={logo} alt="logo" className="w-10 sm:w-12 drop-shadow-sm" />
                         </div> */}
                         
-                        <div className="flex flex-col">
+                        <div className="flex flex-col gap-1">
                             <h1 className="text-lg font-black tracking-tight text-skeuo-text sm:text-xl leading-none">
-                                Doctor Portal
+                                Doctor
                             </h1>
-                            <div className="mt-1.5 flex items-center gap-1.5">
-                                <div className={`flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[9px] sm:text-[10px] font-black uppercase tracking-widest ${
+                            <div className="flex items-center gap-1.5">
+                                <div className={`flex items-center gap-1.5 rounded-lg px-2 py-0.2 text-[10px] font-black uppercase tracking-widest ${
                                     status === "online" 
                                         ? "bg-skeuo-green/10 text-skeuo-green" 
                                         : "bg-skeuo-surface text-skeuo-muted"
@@ -109,17 +109,17 @@ export default function Navbar({
             
             {/* Drawer Panel */}
             <aside
-                className={`fixed left-0 top-0 z-50 flex h-full w-72 max-w-[80%] flex-col rounded-r-[2rem] bg-white/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 md:hidden ${
+                className={`fixed left-0 top-0 z-50 flex h-full w-72 max-w-[80%] flex-col rounded-r-xl bg-white/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 md:hidden ${
                     menuOpen ? "translate-x-0" : "-translate-x-full"
                 }`}
             >
                 {/* Drawer Header */}
                 <div className="flex items-center justify-between border-b border-skeuo-surface/60 px-5 py-5 mt-2">
                     <div className="flex items-center gap-3">
-                        {/* <Image src={logo} alt="logo" className="w-10 drop-shadow-sm" /> */}
+                        <Image src={logo} alt="logo" className="w-10 drop-shadow-sm" />
                         <div className="flex flex-col">
                             <span className="text-lg font-black text-skeuo-text leading-tight">{config.app}</span>
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-skeuo-muted">Doctor Panel</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-skeuo-muted">Doctor Portal</span>
                         </div>
                     </div>
                     <button
