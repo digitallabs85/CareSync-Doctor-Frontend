@@ -83,7 +83,7 @@ export default function LoginPage() {
                     </div>
 
                     {/* ================= Login Form ================= */}
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-3 px-4 sm:px-10 sm:pt-10">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-3 px-6 sm:px-10 sm:pt-10">
 
                         {/* Email Input */}
                         <div>
