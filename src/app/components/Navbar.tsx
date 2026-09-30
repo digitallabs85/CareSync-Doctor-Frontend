@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Menu, Power, LogOut, UserCog, Info, X, Loader2 } from "lucide-react";
 import { config } from "../../../config";
-import logo from "../../../public/logo.png";
+import logo from "../../../public/logo.png"; // Adjust path if needed
 import { authService, doctorService, notificationService } from "@/lib/apiService";
 import { AndroidBridge } from "@/lib/AndroidBridge";
 
@@ -66,20 +66,20 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
                         <button
                             onClick={() => setMenuOpen(true)}
                             aria-label="Open menu"
-                            className="grid h-10 w-10 place-items-center rounded-xl bg-skeuo-surface/50 text-skeuo-text transition-all active:scale-95 md:hidden"
+                            className="grid h-9 w-9 place-items-center rounded-lg bg-skeuo-surface/50 text-skeuo-text transition-all active:scale-95 md:hidden"
                         >
-                            <Menu size={22} />
+                            <Menu size={25} />
                         </button>
                         
-                        <div className="flex flex-col">
-                            <h1 className="text-lg font-black tracking-tight text-skeuo-text sm:text-xl leading-none">
-                                Doctor Portal
+                        <div className="flex flex-col gap-1">
+                            <h1 className="text-xl font-black tracking-tight text-skeuo-text leading-none">
+                                Doctor
                             </h1>
-                            <div className="mt-1.5 flex items-center gap-1.5">
-                                <div className={`flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[9px] sm:text-[10px] font-black uppercase tracking-widest ${
+                            <div className="flex items-center gap-1.5">
+                                <div className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest ${
                                     status === "online" 
-                                        ? "bg-skeuo-green/10 text-skeuo-green" 
-                                        : "bg-skeuo-surface text-skeuo-muted"
+                                        ? " text-skeuo-green" 
+                                        : " text-skeuo-muted"
                                 }`}>
                                     <span className={`h-1.5 w-1.5 rounded-full ${status === "online" ? "animate-pulse bg-skeuo-green" : "bg-skeuo-muted"}`} />
                                     {status === "online" ? "Receiving Calls" : "Offline"}
@@ -101,7 +101,7 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
                             <UserCog size={16} className="text-skeuo-muted" /> Profile
                         </Link>
 
-                        {/* Primary Hero Button with Loading State */}
+                        {/* Primary Hero Button */}
                         <button
                             onClick={toggleStatus}
                             disabled={isTogglingStatus}
@@ -130,13 +130,15 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
                             className="hidden items-center gap-2 rounded-2xl bg-rose-50 px-4 py-2.5 text-sm font-bold text-rose-600 transition-all hover:bg-rose-100 active:scale-95 disabled:opacity-50 md:flex"
                         >
                             {loggingOut ? <Loader2 size={16} className="animate-spin" /> : <LogOut size={16} />} 
-                            {loggingOut ? "Signing out..." : "Sign Out"}
+                            {loggingOut ? "..." : "Sign Out"}
                         </button>
                     </div>
                 </div>
             </header>
 
             {/* ================= Side Drawer (Mobile Native Feel) ================= */}
+            
+            {/* Dark Frosted Overlay */}
             <div
                 onClick={() => setMenuOpen(false)}
                 className={`fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
@@ -144,27 +146,31 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
                 }`}
             />
             
+            {/* Drawer Panel */}
             <aside
-                className={`fixed left-0 top-0 z-50 flex h-full w-72 max-w-[80%] flex-col rounded-r-[2rem] bg-white/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 md:hidden ${
+                className={`fixed left-0 top-0 z-50 flex h-full w-72 max-w-[80%] flex-col rounded-r-xl bg-white/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 md:hidden ${
                     menuOpen ? "translate-x-0" : "-translate-x-full"
                 }`}
             >
+                {/* Drawer Header */}
                 <div className="flex items-center justify-between border-b border-skeuo-surface/60 px-5 py-5 mt-2">
                     <div className="flex items-center gap-3">
+                        <Image src={logo} alt="logo" className="w-10 drop-shadow-sm" />
                         <div className="flex flex-col">
-                            <span className="text-lg font-black text-skeuo-text leading-tight">{config.app}</span>
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-skeuo-muted">Doctor Panel</span>
+                            <span className="text-xl font-black text-skeuo-text leading-tight">{config.app}</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-skeuo-muted">Doctor Portal</span>
                         </div>
                     </div>
                     <button
                         onClick={() => setMenuOpen(false)}
                         aria-label="Close menu"
-                        className="grid h-8 w-8 place-items-center rounded-full bg-skeuo-surface/50 text-skeuo-muted transition-colors hover:bg-skeuo-surface hover:text-skeuo-text active:scale-95"
+                        className="grid h-9 w-9 place-items-center rounded-full bg-skeuo-surface/50 text-skeuo-muted transition-colors hover:bg-skeuo-surface hover:text-skeuo-text active:scale-95"
                     >
                         <X size={18} />
                     </button>
                 </div>
 
+                {/* Drawer Links */}
                 <nav className="flex flex-1 flex-col gap-2 p-4">
                     <Link
                         href="/profile"
@@ -175,6 +181,7 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
                     </Link>
                 </nav>
 
+                {/* Drawer Footer */}
                 <div className="border-t border-skeuo-surface/60 p-4 pb-8">
                     <button
                         onClick={handleLogout}
