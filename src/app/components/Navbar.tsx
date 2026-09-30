@@ -38,7 +38,7 @@ export default function Navbar({
                         </button>
                         
                         <div className="flex flex-col gap-1">
-                            <h1 className="text-xl font-black tracking-tight text-skeuo-text sm:text-xl leading-none">
+                            <h1 className="text-xl font-black tracking-tight text-skeuo-text leading-none">
                                 Doctor
                             </h1>
                             <div className="flex items-center gap-1.5">
@@ -114,7 +114,7 @@ export default function Navbar({
                     <div className="flex items-center gap-3">
                         <Image src={logo} alt="logo" className="w-10 drop-shadow-sm" />
                         <div className="flex flex-col">
-                            <span className="text-lg font-black text-skeuo-text leading-tight">{config.app}</span>
+                            <span className="text-xl font-black text-skeuo-text leading-tight">{config.app}</span>
                             <span className="text-[10px] font-bold uppercase tracking-widest text-skeuo-muted">Doctor Portal</span>
                         </div>
                     </div>
