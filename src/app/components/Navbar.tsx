@@ -34,7 +34,7 @@ export default function Navbar({
                             aria-label="Open menu"
                             className="grid h-8 w-8 place-items-center rounded-lg bg-skeuo-surface/50 text-skeuo-text transition-all active:scale-95 md:hidden"
                         >
-                            <Menu size={22} />
+                            <Menu size={25} />
                         </button>
                         
                         <div className="flex flex-col gap-1">
