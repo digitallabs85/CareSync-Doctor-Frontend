@@ -1,5 +1,6 @@
-const ACTUAL_URL = process.env.NEXT_PUBLIC_API_URL;
-// const ACTUAL_URL = "http://localhost:5000";
+const ACTUAL_URL = process.env.NODE_ENV === "development" 
+    ? "http://localhost:5000" 
+    : process.env.NEXT_PUBLIC_API_URL;
 
 const BASE_URL = `${ACTUAL_URL}/api`
 
