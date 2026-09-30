@@ -68,7 +68,7 @@ export default function LoginPage() {
                 <div className="w-full overflow-hidden rounded-xl bg-white shadow-sm border border-skeuo-surface/50">
                     
                     {/* ================= Header Branding ================= */}
-                    <div className="flex flex-col items-center bg-gradient-to-b from-skeuo-base/30 to-white px-2 py-6 text-center sm:px-8 sm:py-10">
+                    <div className="flex flex-col items-center bg-gradient-to-b from-skeuo-base/30 to-white px-2 py-4 text-center sm:px-8 sm:py-10">
                         <div className="mb-4 grid h-20 w-20 place-items-center rounded-2xl border border-skeuo-surface/60 bg-white p-2 shadow-sm">
                             <Image 
                                 src={logo} 
@@ -80,7 +80,7 @@ export default function LoginPage() {
                         <h1 className="text-2xl font-black tracking-tight text-skeuo-text">
                             {config.app}
                         </h1>
-                        <p className="mt-1 text-sm font-bold uppercase tracking-widest text-skeuo-muted">
+                        <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-skeuo-muted">
                             Doctor Portal
                         </p>
                     </div>
@@ -95,7 +95,7 @@ export default function LoginPage() {
                         
                         {/* Email Input */}
                         <div>
-                            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-skeuo-muted">
+                            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-skeuo-muted">
                                 Email Address
                             </label>
                             <div className="group relative">
@@ -106,14 +106,14 @@ export default function LoginPage() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
-                                    className="w-full rounded-xl border-2 border-skeuo-surface bg-skeuo-base/30 py-3.5 pl-11 pr-4 text-base font-medium text-skeuo-text outline-none transition-all placeholder:text-skeuo-muted/60 focus:border-skeuo-red focus:bg-white focus:ring-4 focus:ring-skeuo-red/10"
+                                    className="w-full rounded-xl border-2 border-skeuo-surface bg-skeuo-base/30 py-2.5 pl-11 pr-4 text-sm font-medium text-skeuo-text outline-none transition-all placeholder:text-skeuo-muted/60 focus:border-skeuo-red focus:bg-white focus:ring-4 focus:ring-skeuo-red/10 placeholder:text-sm"
                                 />
                             </div>
                         </div>
 
                         {/* Password Input */}
                         <div>
-                            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-skeuo-muted">
+                            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-skeuo-muted">
                                 Password
                             </label>
                             <div className="group relative">
@@ -124,7 +124,7 @@ export default function LoginPage() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
-                                    className="w-full rounded-xl border-2 border-skeuo-surface bg-skeuo-base/30 py-3.5 pl-11 pr-12 text-base font-medium text-skeuo-text outline-none transition-all placeholder:text-skeuo-muted/60 focus:border-skeuo-red focus:bg-white focus:ring-4 focus:ring-skeuo-red/10"
+                                    className="w-full rounded-xl border-2 border-skeuo-surface bg-skeuo-base/30 py-2.5 pl-11 pr-12 text-sm font-medium text-skeuo-text outline-none transition-all placeholder:text-skeuo-muted/60 focus:border-skeuo-red focus:bg-white focus:ring-4 focus:ring-skeuo-red/10 placeholder:text-sm"
                                 />
                                 <button
                                     type="button"
