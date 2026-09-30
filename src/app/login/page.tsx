@@ -53,17 +53,11 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-skeuo-base px-4 py-8 sm:px-6 sm:py-12 lg:px-8 relative overflow-hidden">
-            
-            {/* Subtle background ambient mesh to make the frosted shell pop */}
-            <div className="absolute inset-0 z-0 opacity-40 mix-blend-multiply">
-                <div className="absolute -left-10 top-20 h-72 w-72 rounded-full bg-blue-100 blur-3xl"></div>
-                <div className="absolute right-10 top-40 h-72 w-72 rounded-full bg-rose-100 blur-3xl"></div>
-            </div>
+        <div className="flex min-h-screen flex-col items-center justify-center bg-skeuo-base px-2 py-8 sm:px-6 sm:py-12 lg:px-8 relative overflow-hidden">
+                
 
             {/* ================= The "Shell" (Card Alternative) ================= */}
-            <div>
-                
+            <div className="w-full max-w-md">
                 {/* Inner Crisp Container */}
                 <div className="w-full overflow-hidden rounded-xl bg-white shadow-sm border border-skeuo-surface/50">
                     
@@ -91,7 +85,7 @@ export default function LoginPage() {
                     </div>
 
                     {/* ================= Login Form ================= */}
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-2 py-6 sm:px-10 sm:py-10">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-4 py-6 sm:px-10 sm:py-10">
                         
                         {/* Email Input */}
                         <div>
