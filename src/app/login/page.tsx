@@ -54,23 +54,21 @@ export default function LoginPage() {
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-skeuo-base px-2 py-8 sm:px-6 sm:py-12 lg:px-8 relative overflow-hidden">
-                
+
 
             {/* ================= The "Shell" (Card Alternative) ================= */}
             <div className="w-full max-w-md">
                 {/* Inner Crisp Container */}
                 <div className="w-full overflow-hidden rounded-xl bg-white shadow-sm border border-skeuo-surface/50 py-12 sm:py-6">
-                    
+
                     {/* ================= Header Branding ================= */}
-                    <div className="flex flex-col items-center bg-white px-2 pb-4 text-center sm:px-8 sm:py-10">
-                        <div className="mb-4 grid h-20 w-20 place-items-center rounded-2xl border border-skeuo-surface/60 bg-white p-2 shadow-sm">
-                            <Image 
-                                src={logo} 
-                                alt={`${config.app} Logo`} 
-                                className="h-full w-full object-contain"
-                                priority
-                            />
-                        </div>
+                    <div className="flex flex-col items-center bg-white px-2 text-center sm:px-8 sm:pb-10">
+                        <Image
+                            src={logo}
+                            alt={`${config.app} Logo`}
+                            className="w-[6rem] pb-3"
+                            priority
+                        />
                         <h1 className="text-2xl font-black tracking-tight text-skeuo-text">
                             {config.app}
                         </h1>
@@ -80,13 +78,13 @@ export default function LoginPage() {
                     </div>
 
                     {/* Subtle segmented dashed divider */}
-                    <div className="relative mx-4 flex items-center sm:mx-10">
+                    <div className="relative mx-4 flex items-center sm:mx-10 py-2">
                         <div className="h-px w-full border-t border-dashed border-skeuo-surface"></div>
                     </div>
 
                     {/* ================= Login Form ================= */}
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-4 pt-6 sm:px-10 sm:py-10">
-                        
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-3 px-4 sm:px-10 sm:pt-10">
+
                         {/* Email Input */}
                         <div>
                             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-skeuo-muted">
@@ -154,7 +152,7 @@ export default function LoginPage() {
                                 <span>Secure Login</span>
                             )}
                         </button>
-                        
+
                     </form>
                 </div>
             </div>
