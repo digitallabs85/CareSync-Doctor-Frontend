@@ -58,9 +58,9 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
     return (
         <>
             {/* ================= Header ================= */}
-            <header className="sticky top-0 z-40 border-b border-skeuo-surface/60 bg-white/80 px-4 py-3 backdrop-blur-xl transition-all sm:px-6 sm:py-4 lg:px-8">
+            <header className="sticky top-0 z-40 border-b border-skeuo-surface/60 bg-white px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
                 <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
-                    
+
                     {/* Left: Branding & Status */}
                     <div className="flex items-center gap-3 sm:gap-4">
                         <button
@@ -70,17 +70,16 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
                         >
                             <Menu size={25} />
                         </button>
-                        
+
                         <div className="flex flex-col gap-1">
                             <h1 className="text-xl font-black tracking-tight text-skeuo-text leading-none">
                                 Doctor
                             </h1>
                             <div className="flex items-center gap-1.5">
-                                <div className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest ${
-                                    status === "online" 
-                                        ? " text-skeuo-green" 
-                                        : " text-skeuo-muted"
-                                }`}>
+                                <div className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest ${status === "online"
+                                    ? " text-skeuo-green"
+                                    : " text-skeuo-muted"
+                                    }`}>
                                     <span className={`h-1.5 w-1.5 rounded-full ${status === "online" ? "animate-pulse bg-skeuo-green" : "bg-skeuo-muted"}`} />
                                     {status === "online" ? "Receiving Calls" : "Offline"}
                                 </div>
@@ -105,11 +104,10 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
                         <button
                             onClick={toggleStatus}
                             disabled={isTogglingStatus}
-                            className={`group relative flex items-center gap-2 rounded-2xl px-4 py-2.5 sm:px-5 text-sm font-black transition-all active:scale-95 disabled:pointer-events-none disabled:opacity-70 ${
-                                status === "online"
-                                    ? "bg-skeuo-red text-white shadow-lg shadow-skeuo-red/20 hover:bg-skeuo-red-dark"
-                                    : "bg-skeuo-green text-white shadow-lg shadow-skeuo-green/20 hover:bg-green-600"
-                            }`}
+                            className={`group relative flex items-center gap-2 rounded-2xl px-4 py-2.5 sm:px-5 text-sm font-black transition-all active:scale-95 disabled:pointer-events-none disabled:opacity-70 ${status === "online"
+                                ? "bg-skeuo-red text-white shadow-lg shadow-skeuo-red/20 hover:bg-skeuo-red-dark"
+                                : "bg-skeuo-green text-white shadow-lg shadow-skeuo-green/20 hover:bg-green-600"
+                                }`}
                         >
                             {isTogglingStatus ? (
                                 <Loader2 size={16} className="animate-spin" />
@@ -117,8 +115,8 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
                                 <Power size={16} className={status === "online" ? "group-hover:animate-pulse" : ""} />
                             )}
                             <span className="hidden sm:inline">
-                                {isTogglingStatus 
-                                    ? "Updating..." 
+                                {isTogglingStatus
+                                    ? "Updating..."
                                     : status === "online" ? "Go Offline" : "Go Online"
                                 }
                             </span>
@@ -129,7 +127,7 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
                             disabled={loggingOut}
                             className="hidden items-center gap-2 rounded-2xl bg-rose-50 px-4 py-2.5 text-sm font-bold text-rose-600 transition-all hover:bg-rose-100 active:scale-95 disabled:opacity-50 md:flex"
                         >
-                            {loggingOut ? <Loader2 size={16} className="animate-spin" /> : <LogOut size={16} />} 
+                            {loggingOut ? <Loader2 size={16} className="animate-spin" /> : <LogOut size={16} />}
                             {loggingOut ? "..." : "Sign Out"}
                         </button>
                     </div>
@@ -137,20 +135,19 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
             </header>
 
             {/* ================= Side Drawer (Mobile Native Feel) ================= */}
-            
+
             {/* Dark Frosted Overlay */}
             <div
                 onClick={() => setMenuOpen(false)}
-                className={`fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
-                    menuOpen ? "opacity-100" : "pointer-events-none opacity-0"
-                }`}
+                className={`fixed inset-0 z-50 bg-black/40 transition-opacity duration-200 md:hidden ${menuOpen ? "opacity-100" : "pointer-events-none opacity-0"
+                    }`}
             />
-            
+
             {/* Drawer Panel */}
             <aside
-                className={`fixed left-0 top-0 z-50 flex h-full w-72 max-w-[80%] flex-col rounded-r-xl bg-white/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 md:hidden ${
-                    menuOpen ? "translate-x-0" : "-translate-x-full"
-                }`}
+                aria-hidden={!menuOpen}
+                className={`fixed left-0 top-0 z-50 flex h-full w-72 max-w-[80%] transform-gpu flex-col rounded-r-xl bg-white  will-change-transform transition-transform duration-200 ease-out md:hidden ${menuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full "
+                    }`}
             >
                 {/* Drawer Header */}
                 <div className="flex items-center justify-between border-b border-skeuo-surface/60 px-5 py-5 mt-2">
@@ -188,7 +185,7 @@ export default function Navbar({ status, setStatus }: NavbarProps) {
                         disabled={loggingOut}
                         className="flex w-full items-center justify-center gap-3 rounded-2xl bg-skeuo-red/5 px-4 py-3.5 font-bold text-skeuo-red transition-colors hover:bg-skeuo-red/10 active:scale-95 disabled:opacity-50"
                     >
-                        {loggingOut ? <Loader2 size={20} className="animate-spin" /> : <LogOut size={20} />} 
+                        {loggingOut ? <Loader2 size={20} className="animate-spin" /> : <LogOut size={20} />}
                         {loggingOut ? "Signing out..." : "Sign Out"}
                     </button>
                     <div className="mt-4 flex items-center justify-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-skeuo-muted">
