@@ -53,7 +53,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-skeuo-base px-3 py-8 sm:px-6 sm:py-12 lg:px-8 relative overflow-hidden">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-skeuo-base px-2 py-8 sm:px-6 sm:py-12 lg:px-8 relative overflow-hidden">
                 
 
             {/* ================= The "Shell" (Card Alternative) ================= */}
