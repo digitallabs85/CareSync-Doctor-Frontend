@@ -121,7 +121,7 @@ export default function Navbar({
                     <button
                         onClick={() => setMenuOpen(false)}
                         aria-label="Close menu"
-                        className="grid h-8 w-8 place-items-center rounded-full bg-skeuo-surface/50 text-skeuo-muted transition-colors hover:bg-skeuo-surface hover:text-skeuo-text active:scale-95"
+                        className="grid h-9 w-9 place-items-center rounded-full bg-skeuo-surface/50 text-skeuo-muted transition-colors hover:bg-skeuo-surface hover:text-skeuo-text active:scale-95"
                     >
                         <X size={18} />
                     </button>
