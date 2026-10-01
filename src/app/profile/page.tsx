@@ -1,16 +1,16 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  ArrowLeft, 
-  Save, 
-  User, 
-  Phone, 
-  Stethoscope, 
-  Mail, 
-  Loader2, 
-  CheckCircle, 
-  AlertCircle 
+import {
+  ArrowLeft,
+  Save,
+  User,
+  Phone,
+  Stethoscope,
+  Mail,
+  Loader2,
+  CheckCircle,
+  AlertCircle
 } from "lucide-react";
 import { authService, doctorService } from "@/lib/apiService";
 
@@ -24,22 +24,40 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const touched = useRef(false)
 
   useEffect(() => {
     if (!localStorage.getItem("doctorToken")) {
       router.replace("/login");
       return;
     }
+
+    const fill = (d: any) => {
+      setDoctorId(d.id);
+      setEmail(d.email ?? "");
+      setForm({
+        name: `${d.firstName} ${d.lastName}`,
+        phone: d.phone ?? "",
+        specialization: d.specializations ?? "",
+      });
+    };
+
+    // instant prefill from the doctor saved at login
+    const cached = localStorage.getItem("doctor");
+    if (cached) {
+      try {
+        fill(JSON.parse(cached));
+        setLoading(false);
+      } catch { }
+    }
+
+    // then refresh from the server
     authService
       .me()
       .then((doctor) => {
-        setDoctorId(doctor.id);
-        setForm({
-          name: doctor.name ?? "",
-          phone: doctor.phone ?? "",
-          specialization: doctor.specialization ?? "",
-        });
-        setEmail(doctor.email ?? "");
+        console.log("doctor payload:", doctor); // check the real field names here
+        localStorage.setItem("doctor", JSON.stringify(doctor));
+        if (!touched.current) fill(doctor); // don't overwrite what the user is typing
       })
       .catch((err) => {
         console.error("Profile load failed:", err);
@@ -49,6 +67,7 @@ export default function ProfilePage() {
   }, [router]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    touched.current = true;
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
@@ -112,7 +131,7 @@ export default function ProfilePage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-5 py-6 sm:px-8 sm:py-8 animate-fade-in">
-              
+
               {/* Email (Disabled) */}
               <div>
                 <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-skeuo-muted">
@@ -182,11 +201,10 @@ export default function ProfilePage() {
 
               {/* Status Message */}
               {message && (
-                <div className={`mt-2 flex items-center gap-2.5 rounded-xl border px-4 py-3 animate-fade-in ${
-                  message.type === "success" 
-                    ? "border-skeuo-green/30 bg-skeuo-green/5 text-skeuo-green" 
+                <div className={`mt-2 flex items-center gap-2.5 rounded-xl border px-4 py-3 animate-fade-in ${message.type === "success"
+                    ? "border-skeuo-green/30 bg-skeuo-green/5 text-skeuo-green"
                     : "border-rose-200 bg-rose-50 text-rose-600"
-                }`}>
+                  }`}>
                   {message.type === "success" ? <CheckCircle size={18} className="shrink-0" /> : <AlertCircle size={18} className="shrink-0" />}
                   <p className="text-sm font-bold">{message.text}</p>
                 </div>
@@ -210,7 +228,7 @@ export default function ProfilePage() {
                   </>
                 )}
               </button>
-              
+
             </form>
           )}
         </div>
