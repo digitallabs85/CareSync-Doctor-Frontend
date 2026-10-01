@@ -1,11 +1,13 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft, Save, User, Phone, Stethoscope, Mail, Loader2, CheckCircle,
   AlertCircle, MapPin, BadgeCheck, Briefcase, GraduationCap, X,
+  Camera,
 } from "lucide-react";
-import { authService, doctorService } from "@/lib/apiService";
+import { authService, doctorService, uploadService } from "@/lib/apiService";
+import { WebcamPhotoModal } from "../components/WebcamPhotoModal";
 
 type Form = {
   title: string;
@@ -123,6 +125,41 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const [showPhotoChoice, setShowPhotoChoice] = useState(false);
+  const [showWebcam, setShowWebcam] = useState(false);
+
+  const uploadPhotoFile = useCallback(async (file: File) => {
+    setPhotoUploading(true);
+    setMessage(null);
+    try {
+      const data = await uploadService.uploadDoctorPhoto(file);
+      touched.current = true;
+      setPhoto(data.url);
+      setMessage({ type: "success", text: "Photo uploaded. Tap Save Profile to apply." });
+    } catch (err) {
+      console.error("Photo upload failed:", err);
+      setMessage({ type: "error", text: "Photo upload failed. Try again." });
+    } finally {
+      setPhotoUploading(false);
+    }
+  }, []);
+
+  const handleWebcamCapture = useCallback(
+    async (dataUrl: string) => {
+      const blob = await (await fetch(dataUrl)).blob();
+      await uploadPhotoFile(new File([blob], `doctor-photo-${Date.now()}.jpg`, { type: "image/jpeg" }));
+    },
+    [uploadPhotoFile]
+  );
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) uploadPhotoFile(file);
+    e.target.value = "";
+  }
+
   useEffect(() => {
     if (!localStorage.getItem("doctorToken")) {
       router.replace("/login");
@@ -153,7 +190,7 @@ export default function ProfilePage() {
       try {
         fill(JSON.parse(cached));
         setLoading(false);
-      } catch {}
+      } catch { }
     }
 
     // then refresh from the server
@@ -192,6 +229,7 @@ export default function ProfilePage() {
     setMessage(null);
     try {
       const res = await doctorService.updateProfile(doctorId, {
+        photo: photo || null,
         title: form.title,
         firstName: form.firstName.trim(),
         lastName: form.lastName.trim(),
@@ -220,6 +258,39 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-skeuo-base">
+      <WebcamPhotoModal
+        isOpen={showWebcam}
+        onClose={() => setShowWebcam(false)}
+        onCapture={handleWebcamCapture}
+        title="Take Your Photo"
+      />
+
+      <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleFileChange} />
+
+      {showPhotoChoice && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          onClick={() => setShowPhotoChoice(false)}
+        >
+          <div className="w-64 rounded-2xl bg-white p-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="mb-3 text-center text-sm font-semibold text-skeuo-text">Profile Photo</h3>
+            <button
+              type="button"
+              className="mb-2 w-full rounded-lg bg-skeuo-red py-2 text-sm font-medium text-white hover:bg-skeuo-red-dark"
+              onClick={() => { setShowPhotoChoice(false); setShowWebcam(true); }}
+            >
+              Take Photo
+            </button>
+            <button
+              type="button"
+              className="w-full rounded-lg bg-skeuo-surface py-2 text-sm font-medium text-skeuo-text"
+              onClick={() => { setShowPhotoChoice(false); fileInputRef.current?.click(); }}
+            >
+              Upload from Gallery
+            </button>
+          </div>
+        </div>
+      )}
       <header className="sticky top-0 z-40 border-b border-skeuo-surface/60 bg-white px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
         <div className="mx-auto flex w-full max-w-2xl items-center gap-4">
           <button
@@ -247,14 +318,29 @@ export default function ProfilePage() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-5 py-6 sm:px-8 sm:py-8">
               {/* Avatar */}
               <div className="flex items-center gap-4">
-                {photo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={photo} alt="Profile" className="h-16 w-16 rounded-full object-cover" />
-                ) : (
-                  <div className="grid h-16 w-16 place-items-center rounded-full bg-skeuo-red/10 text-xl font-black text-skeuo-red">
-                    {initials}
-                  </div>
-                )}
+                <button
+                  type="button"
+                  onClick={() => setShowPhotoChoice(true)}
+                  aria-label="Change photo"
+                  className="relative shrink-0 active:scale-95"
+                >
+                  {photo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={photo} alt="Profile" className="h-16 w-16 rounded-full object-cover" />
+                  ) : (
+                    <div className="grid h-16 w-16 place-items-center rounded-full bg-skeuo-red/10 text-xl font-black text-skeuo-red">
+                      {initials}
+                    </div>
+                  )}
+                  {photoUploading && (
+                    <span className="absolute inset-0 grid place-items-center rounded-full bg-white/70">
+                      <Loader2 size={20} className="animate-spin text-skeuo-red" />
+                    </span>
+                  )}
+                  <span className="absolute -bottom-0.5 -right-0.5 grid h-6 w-6 place-items-center rounded-full bg-skeuo-red text-white">
+                    <Camera size={12} />
+                  </span>
+                </button>
                 <div className="min-w-0">
                   <p className="truncate text-base font-black text-skeuo-text">
                     {form.title} {form.firstName} {form.lastName}
@@ -334,11 +420,10 @@ export default function ProfilePage() {
 
               {message && (
                 <div
-                  className={`flex items-center gap-2.5 rounded-xl border px-4 py-3 ${
-                    message.type === "success"
-                      ? "border-skeuo-green/30 bg-skeuo-green/5 text-skeuo-green"
-                      : "border-rose-200 bg-rose-50 text-rose-600"
-                  }`}
+                  className={`flex items-center gap-2.5 rounded-xl border px-4 py-3 ${message.type === "success"
+                    ? "border-skeuo-green/30 bg-skeuo-green/5 text-skeuo-green"
+                    : "border-rose-200 bg-rose-50 text-rose-600"
+                    }`}
                 >
                   {message.type === "success" ? <CheckCircle size={18} className="shrink-0" /> : <AlertCircle size={18} className="shrink-0" />}
                   <p className="text-sm font-bold">{message.text}</p>
