@@ -291,7 +291,7 @@ export default function ProfilePage() {
           </div>
         </div>
       )}
-      <header className="sticky top-0 z-40 border-b border-skeuo-surface/60 bg-white px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
+      <header className="sticky top-0 z-40 border-b border-skeuo-surface/60 bg-white px-2 py-3 sm:px-6 sm:py-4 lg:px-8">
         <div className="mx-auto flex w-full max-w-2xl items-center gap-4">
           <button
             onClick={() => router.back()}
@@ -307,7 +307,7 @@ export default function ProfilePage() {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-2xl px-4 py-6 sm:px-6 sm:py-10">
+      <main className="mx-auto w-full max-w-2xl px-2 py-6 sm:px-6 sm:py-10">
         <div className="overflow-hidden rounded-[2rem] border border-skeuo-surface/60 bg-white shadow-sm">
           {loading ? (
             <div className="flex h-64 flex-col items-center justify-center gap-3 text-skeuo-muted">
@@ -315,7 +315,7 @@ export default function ProfilePage() {
               <span className="text-sm font-bold uppercase tracking-widest">Loading Details...</span>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-5 py-6 sm:px-8 sm:py-8">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-4 py-6 sm:px-8 sm:py-8">
               {/* Avatar */}
               <div className="flex items-center gap-4">
                 <button
@@ -342,7 +342,7 @@ export default function ProfilePage() {
                   </span>
                 </button>
                 <div className="min-w-0">
-                  <p className="truncate text-base font-black text-skeuo-text">
+                  <p className="truncate text-lg font-black text-skeuo-text">
                     {form.title} {form.firstName} {form.lastName}
                   </p>
                   <p className="truncate text-sm font-medium text-skeuo-muted">{email}</p>
@@ -355,7 +355,7 @@ export default function ProfilePage() {
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-[130px_1fr_1fr]">
                 <div>
-                  <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-skeuo-muted">
+                  <label className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">
                     Title
                   </label>
                   <select name="title" value={form.title} onChange={handleChange} className={`${inputBase} pl-4`}>
