@@ -86,6 +86,7 @@ export const WebcamPhotoModal: React.FC<WebcamPhotoModalProps> = ({
             ref={webcamRef}
             audio={false}
             screenshotFormat="image/jpeg"
+            mirrored
             screenshotQuality={0.92}
             videoConstraints={{ facingMode: "user" }}
             onUserMedia={() => {
