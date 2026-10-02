@@ -97,7 +97,7 @@ export const WebcamPhotoModal: React.FC<WebcamPhotoModalProps> = ({
               setCameraReady(false);
               native()?.hideCameraLoading?.();
             }}
-            className="w-full h-full object-cover block"
+            className="w-full h-full object-contain block bg-black"
           />
 
           <div className="absolute bottom-0 left-0 right-0 z-10 flex flex-col items-center px-4 pt-5 pb-12 bg-linear-to-t from-black/70 to-transparent">
