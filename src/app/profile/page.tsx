@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { authService, doctorService, uploadService } from "@/lib/apiService";
 import { WebcamPhotoModal } from "../components/WebcamPhotoModal";
+import { ImageCropModal } from "../components/ImageCropModal";
 
 type Form = {
   title: string;
@@ -126,9 +127,16 @@ export default function ProfilePage() {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [photoUploading, setPhotoUploading] = useState(false);
   const [showPhotoChoice, setShowPhotoChoice] = useState(false);
   const [showWebcam, setShowWebcam] = useState(false);
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
+
+  function closeCrop() {
+    if (cropSrc?.startsWith("blob:")) URL.revokeObjectURL(cropSrc);
+    setCropSrc(null);
+  }
 
   const uploadPhotoFile = useCallback(async (file: File) => {
     setPhotoUploading(true);
@@ -146,17 +154,13 @@ export default function ProfilePage() {
     }
   }, []);
 
-  const handleWebcamCapture = useCallback(
-    async (dataUrl: string) => {
-      const blob = await (await fetch(dataUrl)).blob();
-      await uploadPhotoFile(new File([blob], `doctor-photo-${Date.now()}.jpg`, { type: "image/jpeg" }));
-    },
-    [uploadPhotoFile]
-  );
+  const handleWebcamCapture = useCallback((dataUrl: string) => {
+    setCropSrc(dataUrl);
+  }, []);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (file) uploadPhotoFile(file);
+    if (file) setCropSrc(URL.createObjectURL(file));
     e.target.value = "";
   }
 
@@ -264,6 +268,14 @@ export default function ProfilePage() {
         onCapture={handleWebcamCapture}
         title="Take Your Photo"
       />
+
+      {cropSrc && (
+        <ImageCropModal
+          src={cropSrc}
+          onCancel={closeCrop}
+          onDone={(file) => { closeCrop(); uploadPhotoFile(file); }}
+        />
+      )}
 
       <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleFileChange} />
 
