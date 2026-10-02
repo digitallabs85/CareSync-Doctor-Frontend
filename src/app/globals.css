@@ -93,3 +93,12 @@
   font-size: 13px;
   font-weight: 700;
 }
+
+.gapTextAndInput {
+  gap: 3px
+}
+
+.inputPaddingX {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
