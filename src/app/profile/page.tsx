@@ -257,7 +257,7 @@ export default function ProfilePage() {
               <span className="text-sm font-bold uppercase tracking-widest">Loading Details...</span>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 px-3 py-4 sm:px-8 sm:py-8">
+            <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 px-5 py-4 sm:px-8 sm:py-8">
               {/* Avatar */}
               <div className="flex w-full items-center gap-4">
                 <button type="button" onClick={() => setShowPhotoChoice(true)} aria-label="Change photo" className="relative shrink-0 active:scale-95">
