@@ -345,7 +345,7 @@ export default function ProfilePage() {
                 <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Gender</label>
                 <Select
                   value={form.gender}
-                  onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, gender: v })); }}
+                  onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, gender: v ?? "" })); }}
                 >
                   <SelectTrigger className="h-auto w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 px-4 py-2.5 text-sm font-bold text-skeuo-text shadow-none transition-colors focus:border-skeuo-red focus:bg-white focus:ring-0 focus-visible:border-skeuo-red focus-visible:ring-0 data-[size=default]:h-auto data-[state=open]:border-skeuo-red data-[state=open]:bg-white data-[placeholder]:text-skeuo-muted">
                     <SelectValue placeholder="Select" />
