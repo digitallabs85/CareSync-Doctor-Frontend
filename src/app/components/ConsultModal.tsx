@@ -15,9 +15,11 @@ export function ConsultModal({ onClose, patientId, patientToken, vitalsId }: Con
   const [tab, setTab] = useState<"info" | "prescription">("info");
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] bg-white shadow-2xl animate-fade-in">
+
+      {/* Replaced max-h-[90vh] with h-full and widened max-w-lg to max-w-5xl for a proper full-screen feel */}
+      <div className="relative z-10 h-full w-full max-w-5xl overflow-y-auto rounded-[2rem] bg-white shadow-2xl animate-fade-in">
 
         {/* ================= Header Tabs ================= */}
         <div className="sticky top-0 z-20 flex items-center justify-between border-b border-skeuo-surface bg-white/90 px-4 py-3 backdrop-blur-md sm:px-5 sm:py-4 rounded-t-[2rem]">
@@ -25,8 +27,8 @@ export function ConsultModal({ onClose, patientId, patientToken, vitalsId }: Con
             <button
               onClick={() => setTab("info")}
               className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all ${tab === "info"
-                  ? "bg-skeuo-red text-white shadow-md shadow-skeuo-red/20"
-                  : "bg-skeuo-base/50 text-skeuo-muted hover:bg-skeuo-surface hover:text-skeuo-text"
+                ? "bg-skeuo-red text-white shadow-md shadow-skeuo-red/20"
+                : "bg-skeuo-base/50 text-skeuo-muted hover:bg-skeuo-surface hover:text-skeuo-text"
                 }`}
             >
               <User size={16} /> Info
@@ -34,8 +36,8 @@ export function ConsultModal({ onClose, patientId, patientToken, vitalsId }: Con
             <button
               onClick={() => setTab("prescription")}
               className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all ${tab === "prescription"
-                  ? "bg-skeuo-red text-white shadow-md shadow-skeuo-red/20"
-                  : "bg-skeuo-base/50 text-skeuo-muted hover:bg-skeuo-surface hover:text-skeuo-text"
+                ? "bg-skeuo-red text-white shadow-md shadow-skeuo-red/20"
+                : "bg-skeuo-base/50 text-skeuo-muted hover:bg-skeuo-surface hover:text-skeuo-text"
                 }`}
             >
               <Pill size={16} /> Prescription

@@ -357,11 +357,9 @@ export function PrescriptionModal({ onClose, patientId, patientToken, vitalsId, 
                 </div>
               )}
               <Popover>
-                <PopoverTrigger>
-                  <button className="flex min-h-[3rem] w-full items-center justify-between rounded-xl border-2 border-skeuo-surface bg-skeuo-base/30 px-4 py-2 text-left transition-colors hover:bg-white focus:border-skeuo-red outline-none">
-                    <span className="text-base font-medium text-skeuo-muted">Search diagnosis...</span>
-                    <ChevronsUpDown className="h-5 w-5 shrink-0 text-skeuo-muted" />
-                  </button>
+                <PopoverTrigger className="flex min-h-[3rem] w-full items-center justify-between rounded-xl border-2 border-skeuo-surface bg-skeuo-base/30 px-4 py-2 text-left transition-colors hover:bg-white focus:border-skeuo-red outline-none">
+                  <span className="text-base font-medium text-skeuo-muted">Search diagnosis...</span>
+                  <ChevronsUpDown className="h-5 w-5 shrink-0 text-skeuo-muted" />
                 </PopoverTrigger>
                 <PopoverContent className="w-[calc(100vw-2rem)] bg-white sm:w-80 rounded-xl border-skeuo-surface p-0 shadow-lg" align="start">
                   <Command>
@@ -438,11 +436,9 @@ export function PrescriptionModal({ onClose, patientId, patientToken, vitalsId, 
                 </div>
               )}
               <Popover>
-                <PopoverTrigger>
-                  <button className="flex min-h-[3rem] w-full items-center justify-between rounded-xl border-2 border-skeuo-surface bg-skeuo-base/30 px-4 py-2 text-left transition-colors hover:bg-white focus:border-skeuo-red outline-none">
-                    <span className="text-base font-medium text-skeuo-muted">Search hematological tests...</span>
-                    <ChevronsUpDown className="h-5 w-5 shrink-0 text-skeuo-muted" />
-                  </button>
+                <PopoverTrigger className="flex min-h-[3rem] w-full items-center justify-between rounded-xl border-2 border-skeuo-surface bg-skeuo-base/30 px-4 py-2 text-left transition-colors hover:bg-white focus:border-skeuo-red outline-none">
+                  <span className="text-base font-medium text-skeuo-muted">Search hematological tests...</span>
+                  <ChevronsUpDown className="h-5 w-5 shrink-0 text-skeuo-muted" />
                 </PopoverTrigger>
                 <PopoverContent className="w-[calc(100vw-2rem)] bg-white sm:w-80 rounded-xl border-skeuo-surface p-0 shadow-lg" align="start">
                   <Command>
@@ -519,11 +515,9 @@ export function PrescriptionModal({ onClose, patientId, patientToken, vitalsId, 
                 </div>
               )}
               <Popover>
-                <PopoverTrigger>
-                  <button className="flex min-h-[3rem] w-full items-center justify-between rounded-xl border-2 border-skeuo-surface bg-skeuo-base/30 px-4 py-2 text-left transition-colors hover:bg-white focus:border-skeuo-red outline-none">
-                    <span className="text-base font-medium text-skeuo-muted">Search radiological tests...</span>
-                    <ChevronsUpDown className="h-5 w-5 shrink-0 text-skeuo-muted" />
-                  </button>
+                <PopoverTrigger className="flex min-h-[3rem] w-full items-center justify-between rounded-xl border-2 border-skeuo-surface bg-skeuo-base/30 px-4 py-2 text-left transition-colors hover:bg-white focus:border-skeuo-red outline-none">
+                  <span className="text-base font-medium text-skeuo-muted">Search radiological tests...</span>
+                  <ChevronsUpDown className="h-5 w-5 shrink-0 text-skeuo-muted" />
                 </PopoverTrigger>
                 <PopoverContent className="w-[calc(100vw-2rem)] bg-white sm:w-80 rounded-xl border-skeuo-surface p-0 shadow-lg" align="start">
                   <Command>
