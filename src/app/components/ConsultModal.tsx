@@ -18,33 +18,31 @@ export function ConsultModal({ onClose, patientId, patientToken, vitalsId }: Con
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={onClose} />
       <div className="relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] bg-white shadow-2xl animate-fade-in">
-        
+
         {/* ================= Header Tabs ================= */}
-        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-skeuo-surface bg-white/90 backdrop-blur-md px-4 py-4 sm:px-6 sm:py-5 rounded-t-[2rem]">
+        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-skeuo-surface bg-white/90 px-4 py-3 backdrop-blur-md sm:px-5 sm:py-4 rounded-t-[2rem]">
           <div className="flex gap-2">
             <button
               onClick={() => setTab("info")}
-              className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all ${
-                tab === "info" 
-                  ? "bg-skeuo-red text-white shadow-md shadow-skeuo-red/20" 
+              className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all ${tab === "info"
+                  ? "bg-skeuo-red text-white shadow-md shadow-skeuo-red/20"
                   : "bg-skeuo-base/50 text-skeuo-muted hover:bg-skeuo-surface hover:text-skeuo-text"
-              }`}
+                }`}
             >
               <User size={16} /> Info
             </button>
             <button
               onClick={() => setTab("prescription")}
-              className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all ${
-                tab === "prescription" 
-                  ? "bg-skeuo-red text-white shadow-md shadow-skeuo-red/20" 
+              className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all ${tab === "prescription"
+                  ? "bg-skeuo-red text-white shadow-md shadow-skeuo-red/20"
                   : "bg-skeuo-base/50 text-skeuo-muted hover:bg-skeuo-surface hover:text-skeuo-text"
-              }`}
+                }`}
             >
               <Pill size={16} /> Prescription
             </button>
           </div>
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="rounded-xl p-2 text-skeuo-muted transition-colors hover:bg-skeuo-surface hover:text-skeuo-text"
           >
             <X size={20} />

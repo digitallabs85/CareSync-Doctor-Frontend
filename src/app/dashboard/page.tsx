@@ -225,7 +225,7 @@ export default function DashboardPage() {
                   Loading queue...
                 </div>
               ) : filteredQueue.length === 0 ? (
-                <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-skeuo-surface bg-skeuo-base/50 py-12 sm:py-16 text-center text-base text-skeuo-muted">
+                <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-skeuo-surface bg-skeuo-base/50 py-8 sm:py-16 text-center text-base text-skeuo-muted">
                   <Activity size={32} className="opacity-20" />
                   {queueTerm ? "No matching patients." : "No patients currently waiting."}
                 </div>
@@ -317,7 +317,7 @@ export default function DashboardPage() {
                   ))}
                 </div>
               ) : filteredCompleted.length === 0 ? (
-                <div className="flex h-32 sm:h-40 flex-col items-center justify-center rounded-xl border border-dashed border-skeuo-surface bg-skeuo-base/50 text-center text-base text-skeuo-muted">
+                <div className="flex py-8 sm:py-16 flex-col items-center justify-center rounded-xl border border-dashed border-skeuo-surface bg-skeuo-base/50 text-center text-base text-skeuo-muted">
                   {completedTerm ? "No matching consults." : "No completed consults yet today."}
                 </div>
               ) : (
