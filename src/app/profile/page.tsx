@@ -283,18 +283,9 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              {/* Email */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Email Address (Read-only)</label>
-                <div className="relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted"><Mail size={18} /></span>
-                  <input value={email} disabled className="form-input pl-11 cursor-not-allowed opacity-60" />
-                </div>
-              </div>
-
               {/* Title */}
               <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-32.5">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Title</label>
+                <label className="form-label">Title</label>
                 <Select
                   value={form.title}
                   onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, title: v ?? p.title })); }}
@@ -312,36 +303,45 @@ export default function ProfilePage() {
                 </Select>
               </div>
 
+              {/* Email */}
+              <div className="flex w-full min-w-0 flex-col gapTextAndInput">
+                <label className="form-label">Email Address (Read-only)</label>
+                <div className="relative">
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted"><Mail size={18} className="text-skeuo-red"/></span>
+                  <input value={email} disabled className="form-input pl-11 cursor-not-allowed opacity-60" />
+                </div>
+              </div>
+
               {/* First name */}
               <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc((100%-162px)/2)]">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">First Name</label>
+                <label className="form-label">First Name</label>
                 <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><User size={18} /></span>
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><User size={18} className="text-skeuo-red" /></span>
                   <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="John" className="form-input pl-11" />
                 </div>
               </div>
 
               {/* Last name */}
               <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc((100%-162px)/2)]">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Last Name</label>
+                <label className="form-label">Last Name</label>
                 <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><User size={18} /></span>
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><User size={18} className="text-skeuo-red" /></span>
                   <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Doe" className="form-input pl-11" />
                 </div>
               </div>
 
               {/* Phone */}
               <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Phone Number</label>
+                <label className="form-label">Phone Number</label>
                 <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><Phone size={18} /></span>
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><Phone size={18} className="text-skeuo-red" /></span>
                   <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+92 300 1234567" className="form-input pl-11" />
                 </div>
               </div>
 
               {/* Gender */}
               <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Gender</label>
+                <label className="form-label">Gender</label>
                 <Select
                   value={form.gender}
                   onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, gender: v ?? "" })); }}
@@ -361,36 +361,36 @@ export default function ProfilePage() {
 
               {/* PMDC */}
               <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">PMDC Number</label>
+                <label className="form-label">PMDC Number</label>
                 <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><BadgeCheck size={18} /></span>
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><BadgeCheck size={18} className="text-skeuo-red" /></span>
                   <input name="pmdcNumber" value={form.pmdcNumber} onChange={handleChange} placeholder="12345-P" className="form-input pl-11" />
                 </div>
               </div>
 
               {/* Experience */}
               <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Experience (Years)</label>
+                <label className="form-label">Experience (Years)</label>
                 <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><Briefcase size={18} /></span>
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><Briefcase size={18} className="text-skeuo-red" /></span>
                   <input name="experience" type="number" min={0} max={80} inputMode="numeric" value={form.experience} onChange={handleChange} className="form-input pl-11" />
                 </div>
               </div>
 
               {/* City */}
               <div className="flex w-full min-w-0 flex-col gapTextAndInput">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">City</label>
+                <label className="form-label">City</label>
                 <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><MapPin size={18} /></span>
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><MapPin size={18} className="text-skeuo-red" /></span>
                   <input name="city" value={form.city} onChange={handleChange} placeholder="Karachi" className="form-input pl-11" />
                 </div>
               </div>
 
               {/* Specializations */}
               <div className="flex w-full min-w-0 flex-col gapTextAndInput">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Specializations</label>
+                <label className="form-label">Specializations</label>
                 <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><Stethoscope size={18} /></span>
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><Stethoscope size={18} className="text-skeuo-red" /></span>
                   <input
                     value={specText}
                     onChange={(e) => setSpecText(e.target.value)}
@@ -421,9 +421,9 @@ export default function ProfilePage() {
 
               {/* Qualifications */}
               <div className="flex w-full min-w-0 flex-col gapTextAndInput">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Qualifications</label>
+                <label className="form-label">Qualifications</label>
                 <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><GraduationCap size={18} /></span>
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><GraduationCap size={18} className="text-skeuo-red" /></span>
                   <input
                     value={qualText}
                     onChange={(e) => setQualText(e.target.value)}
@@ -455,7 +455,7 @@ export default function ProfilePage() {
               {/* Message */}
               {message && (
                 <div className={`flex w-full items-center gap-2.5 rounded-xl border px-4 py-3 ${message.type === "success" ? "border-skeuo-green/30 bg-skeuo-green/5 text-skeuo-green" : "border-rose-200 bg-rose-50 text-rose-600"}`}>
-                  {message.type === "success" ? <CheckCircle size={18} className="shrink-0" /> : <AlertCircle size={18} className="shrink-0" />}
+                  {message.type === "success" ? <CheckCircle size={18}className="shrink-0" /> : <AlertCircle size={18} className="shrink-0" />}
                   <p className="text-sm font-bold">{message.text}</p>
                 </div>
               )}
