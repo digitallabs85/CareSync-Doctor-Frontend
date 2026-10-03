@@ -9,6 +9,7 @@ import {
 import { authService, doctorService, uploadService } from "@/lib/apiService";
 import { WebcamPhotoModal } from "../components/WebcamPhotoModal";
 import { ImageCropModal } from "../components/ImageCropModal";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type Form = {
   title: string;
@@ -282,75 +283,98 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              {/* Title */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-32.5">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Title</label>
-                <select name="title" value={form.title} onChange={handleChange} className="w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 px-4 inputPaddingX text-sm font-bold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white">
-                  {TITLES.map((t) => <option key={t} value={t}>{t}</option>)}
-                </select>
-              </div>
-
               {/* Email */}
               <div className="flex w-full min-w-0 flex-col gapTextAndInput">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Email Address (Read-only)</label>
                 <div className="relative">
                   <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted"><Mail size={18} /></span>
-                  <input value={email} disabled className="w-full cursor-not-allowed rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 inputPaddingX pl-11 pr-4 text-sm font-bold text-skeuo-text opacity-60 outline-none" />
+                  <input value={email} disabled className="form-input pl-11 cursor-not-allowed opacity-60" />
                 </div>
               </div>
 
+              {/* Title */}
+              {/* Title */}
+              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-32.5">
+                <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Title</label>
+                <Select
+                  value={form.title}
+                  onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, title: v ?? p.title })); }}
+                >
+                  <SelectTrigger className="h-auto w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 px-4 py-2.5 text-sm font-bold text-skeuo-text shadow-none transition-colors focus:border-skeuo-red focus:bg-white focus:ring-0 focus-visible:border-skeuo-red focus-visible:ring-0 data-[size=default]:h-auto data-[state=open]:border-skeuo-red data-[state=open]:bg-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-lg border-2 border-skeuo-surface bg-white">
+                    {TITLES.map((t) => (
+                      <SelectItem key={t} value={t} className="cursor-pointer text-sm font-bold text-skeuo-text focus:bg-skeuo-red/10 focus:text-skeuo-red">
+                        {t}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
               {/* First name */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc((100%-170px)/2)]">
+              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc((100%-162px)/2)]">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">First Name</label>
                 <div className="group relative">
                   <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><User size={18} /></span>
-                  <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="John" className="w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 inputPaddingX pl-11 pr-4 text-sm font-bold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white" />
+                  <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="John" className="form-input pl-11" />
                 </div>
               </div>
 
               {/* Last name */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc((100%-170px)/2)]">
+              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc((100%-162px)/2)]">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Last Name</label>
                 <div className="group relative">
                   <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><User size={18} /></span>
-                  <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Doe" className="w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 inputPaddingX pl-11 pr-4 text-sm font-bold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white" />
+                  <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Doe" className="form-input pl-11" />
                 </div>
               </div>
 
               {/* Phone */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-10px)]">
+              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Phone Number</label>
                 <div className="group relative">
                   <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><Phone size={18} /></span>
-                  <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+92 300 1234567" className="w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 inputPaddingX pl-11 pr-4 text-sm font-bold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white" />
+                  <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+92 300 1234567" className="form-input pl-11" />
                 </div>
               </div>
 
               {/* Gender */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-10px)]">
+              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Gender</label>
-                <select name="gender" value={form.gender} onChange={handleChange} className="w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 px-4 inputPaddingX text-sm font-bold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white">
-                  <option value="">Select</option>
-                  {GENDERS.map((g) => <option key={g} value={g}>{g}</option>)}
-                </select>
+                <Select
+                  value={form.gender}
+                  onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, gender: v })); }}
+                >
+                  <SelectTrigger className="h-auto w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 px-4 py-2.5 text-sm font-bold text-skeuo-text shadow-none transition-colors focus:border-skeuo-red focus:bg-white focus:ring-0 focus-visible:border-skeuo-red focus-visible:ring-0 data-[size=default]:h-auto data-[state=open]:border-skeuo-red data-[state=open]:bg-white data-[placeholder]:text-skeuo-muted">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-lg border-2 border-skeuo-surface bg-white">
+                    {GENDERS.map((g) => (
+                      <SelectItem key={g} value={g} className="cursor-pointer text-sm font-bold text-skeuo-text focus:bg-skeuo-red/10 focus:text-skeuo-red">
+                        {g}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* PMDC */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-10px)]">
+              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">PMDC Number</label>
                 <div className="group relative">
                   <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><BadgeCheck size={18} /></span>
-                  <input name="pmdcNumber" value={form.pmdcNumber} onChange={handleChange} placeholder="12345-P" className="w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 inputPaddingX pl-11 pr-4 text-sm font-bold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white" />
+                  <input name="pmdcNumber" value={form.pmdcNumber} onChange={handleChange} placeholder="12345-P" className="form-input pl-11" />
                 </div>
               </div>
 
               {/* Experience */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-10px)]">
+              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">Experience (Years)</label>
                 <div className="group relative">
                   <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><Briefcase size={18} /></span>
-                  <input name="experience" type="number" min={0} max={80} inputMode="numeric" value={form.experience} onChange={handleChange} className="w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 inputPaddingX pl-11 pr-4 text-sm font-bold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white" />
+                  <input name="experience" type="number" min={0} max={80} inputMode="numeric" value={form.experience} onChange={handleChange} className="form-input pl-11" />
                 </div>
               </div>
 
@@ -359,7 +383,7 @@ export default function ProfilePage() {
                 <label className="text-[11px] font-bold uppercase tracking-wider text-skeuo-muted">City</label>
                 <div className="group relative">
                   <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><MapPin size={18} /></span>
-                  <input name="city" value={form.city} onChange={handleChange} placeholder="Karachi" className="w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 inputPaddingX pl-11 pr-4 text-sm font-bold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white" />
+                  <input name="city" value={form.city} onChange={handleChange} placeholder="Karachi" className="form-input pl-11" />
                 </div>
               </div>
 
@@ -379,7 +403,7 @@ export default function ProfilePage() {
                     }}
                     onBlur={() => addTag(specText, specializations, setSpecializations, setSpecText)}
                     placeholder="Type and press Enter (e.g. Cardiologist)"
-                    className="w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 inputPaddingX pl-11 pr-4 text-sm font-bold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white"
+                    className="form-input pl-11"
                   />
                 </div>
                 {specializations.length > 0 && (
@@ -412,7 +436,7 @@ export default function ProfilePage() {
                     }}
                     onBlur={() => addTag(qualText, qualifications, setQualifications, setQualText)}
                     placeholder="Type and press Enter (e.g. MBBS, FCPS)"
-                    className="w-full rounded-lg border-2 border-skeuo-surface bg-skeuo-base/30 inputPaddingX pl-11 pr-4 text-sm font-bold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white"
+                    className="form-input pl-11"
                   />
                 </div>
                 {qualifications.length > 0 && (

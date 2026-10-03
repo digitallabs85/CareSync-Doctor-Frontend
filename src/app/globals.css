@@ -37,23 +37,23 @@
   background-color: var(--color-skeuo-base);
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 8px 8px 16px var(--shadow-dark),
-             -8px -8px 16px var(--shadow-light);
+    -8px -8px 16px var(--shadow-light);
 }
 
 @utility skeuo-pressed {
   background-color: var(--color-skeuo-base);
   border: 1px solid transparent;
   box-shadow: inset 4px 4px 8px var(--shadow-dark),
-              inset -4px -4px 8px var(--shadow-light);
+    inset -4px -4px 8px var(--shadow-light);
 }
 
 @utility skeuo-btn-red {
   background-image: linear-gradient(to bottom, var(--color-skeuo-red), var(--color-skeuo-red-dark));
   color: #ffffff;
   box-shadow: 6px 6px 12px var(--shadow-brand),
-             -4px -4px 10px var(--shadow-light),
-             inset 0 2px 1px rgba(255, 255, 255, 0.3),
-             inset 0 -2px 1px rgba(0, 0, 0, 0.2);
+    -4px -4px 10px var(--shadow-light),
+    inset 0 2px 1px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 1px rgba(0, 0, 0, 0.2);
   transition: all 200ms ease;
 
   &:active {
@@ -66,20 +66,20 @@
   background-color: var(--color-skeuo-base);
   color: var(--color-skeuo-text);
   box-shadow: 5px 5px 10px var(--shadow-dark),
-             -5px -5px 10px var(--shadow-light),
-             inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    -5px -5px 10px var(--shadow-light),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
   transition: all 200ms ease;
 
   &:active {
     box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.08),
-                inset -3px -3px 6px var(--shadow-light);
+      inset -3px -3px 6px var(--shadow-light);
     transform: translateY(2px);
   }
 }
 
 @utility skeuo-pill {
   box-shadow: inset 2px 2px 5px var(--shadow-dark),
-              inset -2px -2px 5px var(--shadow-light);
+    inset -2px -2px 5px var(--shadow-light);
 }
 
 @utility btn-base {
@@ -94,11 +94,15 @@
   font-weight: 700;
 }
 
-.gapTextAndInput {
-  gap: 3px
+@layer components {
+
+  .form-input {
+    @apply w-full rounded-lg border-1 border-skeuo-surface bg-skeuo-base/30 px-4 py-2.5 text-sm font-bold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white;
+  }
+
+  .gapTextAndInput {
+    @apply gap-1
+  }
+
 }
 
-.inputPaddingX {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
