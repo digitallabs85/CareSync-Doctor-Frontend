@@ -80,6 +80,7 @@ export const prescriptionService = {
     getTodayAll: () => api.get("/prescriptions/today"),
     getByVitalsId: (vitalsId: string) => api.get(`/prescriptions/by-vitals/${vitalsId}`),
     getById: (id: string) => api.get(`/prescriptions/${id}`),
+    getFormData: (vitalsId?: string) => api.get(`/prescriptions/form-data${vitalsId ? `?vitalsId=${vitalsId}` : ""}`),
 };
 
 // ---------- UPLOADS (Cloudinary) ----------

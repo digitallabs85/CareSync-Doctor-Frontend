@@ -5,7 +5,7 @@ import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { prescriptionService } from '@/lib/apiService';
-import { DIAGNOSIS_OPTIONS, DOSAGE_UNIT_OPTIONS, DURATION_UNIT_OPTIONS, HEMATOLOGICAL_OPTIONS, MEDICINE_OPTIONS, RADIOLOGICAL_OPTIONS } from './doctorConstants';
+import { DOSAGE_UNIT_OPTIONS, DURATION_UNIT_OPTIONS } from './doctorConstants';
 
 interface Medicine {
   id: number;
@@ -27,6 +27,10 @@ interface PrescriptionModalProps {
   embedded?: boolean;
 }
 
+interface catalogType {
+  medicines: string[]; diagnoses: string[]; hematological: string[]; radiological: string[];
+}
+
 export function PrescriptionModal({ onClose, patientId, patientToken, vitalsId, embedded = false }: PrescriptionModalProps) {
   const [medicines, setMedicines] = useState<Medicine[]>([
     { id: Date.now(), name: '', morning: false, afternoon: false, night: false, meal: 'After Meal' }
@@ -44,6 +48,7 @@ export function PrescriptionModal({ onClose, patientId, patientToken, vitalsId, 
   const [hematologicalOther, setHematologicalOther] = useState('');
   const [radiologicalOther, setRadiologicalOther] = useState('');
   const [loadingPrescription, setLoadingPrescription] = useState(false);
+  const [catalog, setCatalog] = useState<catalogType>({ medicines: [], diagnoses: [], hematological: [], radiological: [] });
 
   const splitDosage = (val: string) => {
     const match = val?.match(/^(\d*\.?\d*)\s*(.*)$/);
@@ -68,28 +73,22 @@ export function PrescriptionModal({ onClose, patientId, patientToken, vitalsId, 
   };
 
   useEffect(() => {
-    if (!vitalsId) {
-      setMedicines([{ id: Date.now(), name: '', morning: false, afternoon: false, night: false, meal: 'After Meal' }]);
-      setNotes('');
-      setDiagnoses([]);
-      setHematologicalTests([]);
-      setRadiologicalTests([]);
-      setLoadingPrescription(false);
-      return;
-    }
+    let cancelled = false;
+    const emptyMed = () => [{ id: Date.now(), name: '', morning: false, afternoon: false, night: false, meal: 'After Meal' }];
 
-    const fetchPrescription = async () => {
+    (async () => {
       setLoadingPrescription(true);
       try {
-        const data = await prescriptionService.getByVitalsId(vitalsId);
+        const { catalog: cat, prescription: data } = await prescriptionService.getFormData(vitalsId);
+        if (cancelled) return;
+        setCatalog(cat);
 
-        setDiagnoses(data.diagnosis ? data.diagnosis.split(',').map((d: string) => d.trim()).filter(Boolean) : []);
-        setHematologicalTests(data.hematologicalTest ? data.hematologicalTest.split(',').map((t: string) => t.trim()).filter(Boolean) : []);
-        setRadiologicalTests(data.radiologicalTest ? data.radiologicalTest.split(',').map((t: string) => t.trim()).filter(Boolean) : []);
-        setNotes(data.clinicalNotes || '');
-
-        if (data.medicines && data.medicines.length > 0) {
-          setMedicines(data.medicines.map((m: any) => ({
+        if (data) {
+          setDiagnoses(data.diagnosis ? data.diagnosis.split(',').map((d: string) => d.trim()).filter(Boolean) : []);
+          setHematologicalTests(data.hematologicalTest ? data.hematologicalTest.split(',').map((t: string) => t.trim()).filter(Boolean) : []);
+          setRadiologicalTests(data.radiologicalTest ? data.radiologicalTest.split(',').map((t: string) => t.trim()).filter(Boolean) : []);
+          setNotes(data.clinicalNotes || '');
+          setMedicines(data.medicines?.length ? data.medicines.map((m: any) => ({
             id: Date.now() + Math.random(),
             name: m.medicineName,
             dosage: m.dosage || '',
@@ -98,26 +97,22 @@ export function PrescriptionModal({ onClose, patientId, patientToken, vitalsId, 
             afternoon: m.afternoon || false,
             night: m.night || false,
             meal: m.beforeMeal ? 'Before Meal' : 'After Meal',
-          })));
+          })) : emptyMed());
         } else {
-          setMedicines([{ id: Date.now(), name: '', morning: false, afternoon: false, night: false, meal: 'After Meal' }]);
+          setMedicines(emptyMed());
+          setNotes('');
+          setDiagnoses([]);
+          setHematologicalTests([]);
+          setRadiologicalTests([]);
         }
-      } catch (err: any) {
-        // 404 = no prescription yet, expected/normal
-        setMedicines([{ id: Date.now(), name: '', morning: false, afternoon: false, night: false, meal: 'After Meal' }]);
-        setNotes('');
-        setDiagnoses([]);
-        setHematologicalTests([]);
-        setRadiologicalTests([]);
-        if (err.status !== 404) {
-          console.error('Failed to fetch prescription:', err);
-        }
+      } catch (err) {
+        console.error('Failed to load prescription form data:', err);
       } finally {
-        setLoadingPrescription(false);
+        if (!cancelled) setLoadingPrescription(false);
       }
-    };
+    })();
 
-    fetchPrescription();
+    return () => { cancelled = true; };
   }, [vitalsId]);
 
   const handleSave = async () => {
@@ -244,8 +239,8 @@ export function PrescriptionModal({ onClose, patientId, patientToken, vitalsId, 
                               >
                                 ✏️ Other (type manually)
                               </div>
-                              {MEDICINE_OPTIONS.filter(m => m.toLowerCase().includes(searchQuery.toLowerCase())).length > 0
-                                ? MEDICINE_OPTIONS.filter(m => m.toLowerCase().includes(searchQuery.toLowerCase())).map((option) => (
+                              {catalog.medicines.filter(m => m.toLowerCase().includes(searchQuery.toLowerCase())).length > 0
+                                ? catalog.medicines.filter(m => m.toLowerCase().includes(searchQuery.toLowerCase())).map((option) => (
                                   <div
                                     key={option}
                                     onMouseDown={() => { updateMedicine(med.id, 'name', option); setSearchQuery(''); setOpenDropdownId(null); }}
@@ -366,7 +361,7 @@ export function PrescriptionModal({ onClose, patientId, patientToken, vitalsId, 
                     <CommandInput placeholder="Search diagnosis..." className="h-11 border-b-skeuo-surface text-base" />
                     <CommandList>
                       <CommandGroup className="max-h-56 overflow-y-auto">
-                        {DIAGNOSIS_OPTIONS.map((option) => (
+                        {catalog.diagnoses.map((option) => (
                           <CommandItem
                             key={option}
                             onSelect={() => setDiagnoses(prev => prev.includes(option) ? prev.filter(d => d !== option) : [...prev, option])}
@@ -445,7 +440,7 @@ export function PrescriptionModal({ onClose, patientId, patientToken, vitalsId, 
                     <CommandInput placeholder="Search test..." className="h-11 border-b-skeuo-surface text-base" />
                     <CommandList>
                       <CommandGroup className="max-h-56 overflow-y-auto">
-                        {HEMATOLOGICAL_OPTIONS.map((option) => (
+                        {catalog.hematological.map((option) => (
                           <CommandItem
                             key={option}
                             onSelect={() => setHematologicalTests(prev => prev.includes(option) ? prev.filter(t => t !== option) : [...prev, option])}
@@ -524,7 +519,7 @@ export function PrescriptionModal({ onClose, patientId, patientToken, vitalsId, 
                     <CommandInput placeholder="Search test..." className="h-11 border-b-skeuo-surface text-base" />
                     <CommandList>
                       <CommandGroup className="max-h-56 overflow-y-auto">
-                        {RADIOLOGICAL_OPTIONS.map((option) => (
+                        {catalog.radiological.map((option) => (
                           <CommandItem
                             key={option}
                             onSelect={() => setRadiologicalTests(prev => prev.includes(option) ? prev.filter(t => t !== option) : [...prev, option])}
