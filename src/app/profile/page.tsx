@@ -299,12 +299,12 @@ export default function ProfilePage() {
                   value={form.title}
                   onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, title: v ?? p.title })); }}
                 >
-                  <SelectTrigger className="h-auto w-full rounded-lg border-1 border-skeuo-surface bg-skeuo-base/30 px-4 py-2.5 text-sm font-bold text-skeuo-text shadow-none transition-colors focus:border-skeuo-red focus:bg-white focus:ring-0 focus-visible:border-skeuo-red focus-visible:ring-0 data-[size=default]:h-auto data-[state=open]:border-skeuo-red data-[state=open]:bg-white">
+                  <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="rounded-lg border-2 border-skeuo-surface bg-white">
+                  <SelectContent className="rounded-lg border-skeuo-surface bg-white">
                     {TITLES.map((t) => (
-                      <SelectItem key={t} value={t} className="cursor-pointer text-sm font-bold text-skeuo-text focus:bg-skeuo-red/10 focus:text-skeuo-red">
+                      <SelectItem key={t} value={t} className="cursor-pointer text-sm font-semibold text-skeuo-text focus:text-skeuo-red">
                         {t}
                       </SelectItem>
                     ))}
@@ -346,12 +346,12 @@ export default function ProfilePage() {
                   value={form.gender}
                   onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, gender: v ?? "" })); }}
                 >
-                  <SelectTrigger className="h-auto w-full rounded-lg border-1 border-skeuo-surface bg-skeuo-base/30 px-4 py-2.5 text-sm font-bold text-skeuo-text shadow-none transition-colors focus:border-skeuo-red focus:bg-white focus:ring-0 focus-visible:border-skeuo-red focus-visible:ring-0 data-[size=default]:h-auto data-[state=open]:border-skeuo-red data-[state=open]:bg-white data-[placeholder]:text-skeuo-muted">
+                  <SelectTrigger>
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent className="rounded-lg border-2 border-skeuo-surface bg-white">
                     {GENDERS.map((g) => (
-                      <SelectItem key={g} value={g} className="cursor-pointer text-sm font-bold text-skeuo-text focus:bg-skeuo-red/10 focus:text-skeuo-red">
+                      <SelectItem key={g} value={g} className="cursor-pointer text-sm font-semibold text-skeuo-text focus:text-skeuo-red">
                         {g}
                       </SelectItem>
                     ))}
