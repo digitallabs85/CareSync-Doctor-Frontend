@@ -5,11 +5,14 @@ import {
   ArrowLeft, Save, User, Phone, Stethoscope, Mail, Loader2, CheckCircle,
   AlertCircle, MapPin, BadgeCheck, Briefcase, GraduationCap, X,
   Camera,
+  Users,
+  Tag,
 } from "lucide-react";
 import { authService, doctorService, uploadService } from "@/lib/apiService";
 import { WebcamPhotoModal } from "../components/WebcamPhotoModal";
 import { ImageCropModal } from "../components/ImageCropModal";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Section } from "../dashboard/page";
 
 type Form = {
   title: string;
@@ -189,7 +192,7 @@ export default function ProfilePage() {
   const initials = `${form.firstName[0] ?? ""}${form.lastName[0] ?? ""}`.toUpperCase() || "DR";
 
   return (
-    <div className="flex min-h-screen flex-col bg-skeuo-base">
+    <div className="min-h-screen bg-skeuo-base">
       <WebcamPhotoModal
         isOpen={showWebcam}
         onClose={() => setShowWebcam(false)}
@@ -201,7 +204,10 @@ export default function ProfilePage() {
         <ImageCropModal
           src={cropSrc}
           onCancel={closeCrop}
-          onDone={(file) => { closeCrop(); uploadPhotoFile(file); }}
+          onDone={(file) => {
+            closeCrop();
+            uploadPhotoFile(file);
+          }}
         />
       )}
 
@@ -213,18 +219,18 @@ export default function ProfilePage() {
           onClick={() => setShowPhotoChoice(false)}
         >
           <div className="flex w-64 flex-col gap-3 rounded-2xl bg-white p-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-center text-sm font-semibold text-skeuo-text">Profile Photo</h3>
+            <h3 className="text-center text-sm font-bold text-skeuo-text">Profile Photo</h3>
             <div className="flex flex-col gap-2">
               <button
                 type="button"
-                className="w-full rounded-lg bg-skeuo-red py-2 text-sm font-medium text-white hover:bg-skeuo-red-dark"
+                className="w-full rounded-lg bg-skeuo-red py-2 text-sm sm:text-base font-bold text-white hover:bg-skeuo-red-dark"
                 onClick={() => { setShowPhotoChoice(false); setShowWebcam(true); }}
               >
                 Take Photo
               </button>
               <button
                 type="button"
-                className="w-full rounded-lg bg-skeuo-surface py-2 text-sm font-medium text-skeuo-text"
+                className="w-full rounded-lg bg-skeuo-surface py-2 text-sm sm:text-base font-bold text-skeuo-text"
                 onClick={() => { setShowPhotoChoice(false); fileInputRef.current?.click(); }}
               >
                 Upload from Gallery
@@ -235,7 +241,7 @@ export default function ProfilePage() {
       )}
 
       <header className="sticky top-0 z-40 border-b border-skeuo-surface/60 bg-white px-2 py-3 sm:px-6 sm:py-4 lg:px-8">
-        <div className="mx-auto flex w-full max-w-2xl items-center gap-4">
+        <div className="mx-auto flex w-full max-w-3xl items-center gap-4">
           <button
             onClick={() => router.back()}
             aria-label="Go back"
@@ -250,236 +256,271 @@ export default function ProfilePage() {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-2xl flex-col px-2 py-4 sm:px-6 sm:py-10">
-        <div className="overflow-hidden rounded-xl border border-skeuo-surface/60 bg-white shadow-sm">
-          {loading ? (
-            <div className="flex h-64 flex-col items-center justify-center gap-3 text-skeuo-muted">
-              <Loader2 size={32} className="animate-spin text-skeuo-red" />
-              <span className="text-sm font-bold uppercase tracking-widest">Loading Details...</span>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 px-5 py-4 sm:px-8 sm:py-8">
-              {/* Avatar */}
-              <div className="flex w-full items-center gap-4">
-                <button type="button" onClick={() => setShowPhotoChoice(true)} aria-label="Change photo" className="relative shrink-0 active:scale-95">
-                  {photo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={photo} alt="Profile" className="h-16 w-16 rounded-full object-cover" />
-                  ) : (
-                    <div className="grid h-16 w-16 place-items-center rounded-full bg-skeuo-red/10 text-xl font-black text-skeuo-red">{initials}</div>
-                  )}
-                  {photoUploading && (
-                    <span className="absolute inset-0 grid place-items-center rounded-full bg-white/70">
-                      <Loader2 size={20} className="animate-spin text-skeuo-red" />
+      <main className="mx-auto flex w-full max-w-3xl flex-col px-2 py-4 sm:px-6 sm:py-8 lg:px-8">
+        <div className="overflow-hidden rounded-2xl border border-skeuo-surface bg-white shadow-sm">
+          <div className="p-4 sm:p-6 lg:p-8">
+            {loading ? (
+              <div className="flex flex-col items-center justify-center gap-3 py-8 sm:py-12 text-base text-skeuo-muted">
+                <span className="h-6 w-6 sm:h-7 sm:w-7 animate-spin rounded-full border-2 border-skeuo-red border-t-transparent" />
+                Loading Details...
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-6">
+
+                {/* Avatar Section */}
+                <div className="flex items-center gap-3 sm:gap-4 ">
+                  <button type="button" onClick={() => setShowPhotoChoice(true)} aria-label="Change photo" className="relative shrink-0 transition-transform active:scale-95">
+                    {photo ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={photo} alt="Profile" className="h-12 w-12 rounded-full object-cover sm:h-16 sm:w-16" />
+                    ) : (
+                      <div className="grid h-12 w-12 place-items-center rounded-full bg-skeuo-red/10 text-lg font-black text-skeuo-red sm:h-16 sm:w-16 sm:text-xl">{initials}</div>
+                    )}
+                    {photoUploading && (
+                      <span className="absolute inset-0 grid place-items-center rounded-full bg-white/70">
+                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-skeuo-red border-t-transparent" />
+                      </span>
+                    )}
+                    <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full bg-skeuo-red text-white shadow-sm sm:h-6 sm:w-6">
+                      <Camera size={12} />
                     </span>
+                  </button>
+                  <div className="flex min-w-0 flex-col gap-0.5">
+                    <p className="truncate text-base font-bold text-skeuo-text sm:text-lg">{form.title} {form.firstName} {form.lastName}</p>
+                    <p className="truncate text-sm font-medium text-skeuo-muted">{email}</p>
+                  </div>
+                </div>
+
+                <div className="border-b border-skeuo-surface" />
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {/* Title */}
+                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput sm:col-span-2 sm:max-w-[200px]">
+                    <label className="form-label flex items-center gap-2">
+                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
+                        <Tag size={14} />
+                      </div>
+                      Title
+                    </label>
+                    <Select
+                      value={form.title}
+                      onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, title: v ?? p.title })); }}
+                    >
+                      <SelectTrigger className="form-input">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-lg border-skeuo-surface bg-white">
+                        {TITLES.map((t) => (
+                          <SelectItem key={t} value={t} className="cursor-pointer text-sm font-semibold text-skeuo-text focus:text-skeuo-red">
+                            {t}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* First Name */}
+                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
+                    <label className="form-label flex items-center gap-2">
+                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
+                        <User size={14} />
+                      </div>
+                      First Name
+                    </label>
+                    <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="John" className="form-input" />
+                  </div>
+
+                  {/* Last Name */}
+                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
+                    <label className="form-label flex items-center gap-2">
+                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
+                        <User size={14} />
+                      </div>
+                      Last Name
+                    </label>
+                    <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Doe" className="form-input" />
+                  </div>
+
+                  {/* Email */}
+                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput sm:col-span-2">
+                    <label className="form-label flex items-center gap-2">
+                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
+                        <Mail size={14} />
+                      </div>
+                      Email Address (Read-only)
+                    </label>
+                    <input value={email} disabled className="form-input cursor-not-allowed bg-skeuo-surface/20 opacity-60" />
+                  </div>
+
+                  {/* Phone */}
+                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
+                    <label className="form-label flex items-center gap-2">
+                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
+                        <Phone size={14} />
+                      </div>
+                      Phone Number
+                    </label>
+                    <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+92 300 1234567" className="form-input" />
+                  </div>
+
+                  {/* Gender */}
+                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
+                    <label className="form-label flex items-center gap-2">
+                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
+                        <Users size={14} />
+                      </div>
+                      Gender
+                    </label>
+                    <Select
+                      value={form.gender}
+                      onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, gender: v ?? "" })); }}
+                    >
+                      <SelectTrigger className="form-input">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-lg border-2 border-skeuo-surface bg-white">
+                        {GENDERS.map((g) => (
+                          <SelectItem key={g} value={g} className="cursor-pointer text-sm font-semibold text-skeuo-text focus:text-skeuo-red">
+                            {g}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* PMDC */}
+                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
+                    <label className="form-label flex items-center gap-2">
+                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
+                        <BadgeCheck size={14} />
+                      </div>
+                      PMDC Number
+                    </label>
+                    <input name="pmdcNumber" value={form.pmdcNumber} onChange={handleChange} placeholder="12345-P" className="form-input" />
+                  </div>
+
+                  {/* Experience */}
+                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
+                    <label className="form-label flex items-center gap-2">
+                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
+                        <Briefcase size={14} />
+                      </div>
+                      Experience (Years)
+                    </label>
+                    <input name="experience" type="number" min={0} max={80} inputMode="numeric" value={form.experience} onChange={handleChange} className="form-input" />
+                  </div>
+
+                  {/* City */}
+                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput sm:col-span-2">
+                    <label className="form-label flex items-center gap-2">
+                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
+                        <MapPin size={14} />
+                      </div>
+                      City
+                    </label>
+                    <input name="city" value={form.city} onChange={handleChange} placeholder="Karachi" className="form-input" />
+                  </div>
+
+                  {/* Specializations */}
+                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput sm:col-span-2">
+                    <label className="form-label flex items-center gap-2">
+                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
+                        <Stethoscope size={14} />
+                      </div>
+                      Specializations
+                    </label>
+                    <input
+                      value={specText}
+                      onChange={(e) => setSpecText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === ",") {
+                          e.preventDefault();
+                          addTag(specText, specializations, setSpecializations, setSpecText);
+                        }
+                      }}
+                      onBlur={() => addTag(specText, specializations, setSpecializations, setSpecText)}
+                      placeholder="Type and press Enter (e.g. Cardiologist)"
+                      className="form-input"
+                    />
+                    {specializations.length > 0 && (
+                      <div className="mt-1 flex flex-wrap gap-2">
+                        {specializations.map((v) => (
+                          <span key={v} className="flex items-center gap-1.5 rounded-lg bg-skeuo-red/10 px-2.5 py-1 text-xs font-bold text-skeuo-red">
+                            {v}
+                            <button type="button" aria-label={`Remove ${v}`} onClick={() => { touched.current = true; setSpecializations(specializations.filter((x) => x !== v)); }}>
+                              <X size={12} />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Qualifications */}
+                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput sm:col-span-2">
+                    <label className="form-label flex items-center gap-2">
+                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
+                        <GraduationCap size={14} />
+                      </div>
+                      Qualifications
+                    </label>
+                    <input
+                      value={qualText}
+                      onChange={(e) => setQualText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === ",") {
+                          e.preventDefault();
+                          addTag(qualText, qualifications, setQualifications, setQualText);
+                        }
+                      }}
+                      onBlur={() => addTag(qualText, qualifications, setQualifications, setQualText)}
+                      placeholder="Type and press Enter (e.g. MBBS, FCPS)"
+                      className="form-input"
+                    />
+                    {qualifications.length > 0 && (
+                      <div className="mt-1 flex flex-wrap gap-2">
+                        {qualifications.map((v) => (
+                          <span key={v} className="flex items-center gap-1.5 rounded-lg bg-skeuo-red/10 px-2.5 py-1 text-xs font-bold text-skeuo-red">
+                            {v}
+                            <button type="button" aria-label={`Remove ${v}`} onClick={() => { touched.current = true; setQualifications(qualifications.filter((x) => x !== v)); }}>
+                              <X size={12} />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Message */}
+                {message && (
+                  <div className={`mt-2 flex w-full items-center gap-2.5 rounded-xl border px-4 py-3 ${message.type === "success" ? "border-skeuo-green/30 bg-skeuo-green/5 text-skeuo-green" : "border-rose-200 bg-rose-50 text-rose-600"}`}>
+                    {message.type === "success" ? <CheckCircle size={18} className="shrink-0" /> : <AlertCircle size={18} className="shrink-0" />}
+                    <p className="text-sm font-bold">{message.text}</p>
+                  </div>
+                )}
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  disabled={saving || !doctorId}
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-skeuo-red py-3 text-sm font-bold text-white shadow-md transition-all hover:bg-skeuo-red-dark hover:shadow-lg active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 sm:py-4 sm:text-base"
+                >
+                  {saving ? (
+                    <>
+                      <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      <span>Saving Changes...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save size={18} />
+                      <span>Save Profile</span>
+                    </>
                   )}
-                  <span className="absolute -bottom-0.5 -right-0.5 grid h-6 w-6 place-items-center rounded-full bg-skeuo-red text-white">
-                    <Camera size={12} />
-                  </span>
                 </button>
-                <div className="flex min-w-0 flex-col gap-0.5">
-                  <p className="truncate text-lg font-black text-skeuo-text">{form.title} {form.firstName} {form.lastName}</p>
-                  <p className="truncate text-sm font-medium text-skeuo-muted">{email}</p>
-                </div>
-              </div>
-
-              {/* Title */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-32.5">
-                <label className="form-label">Title</label>
-                <Select
-                  value={form.title}
-                  onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, title: v ?? p.title })); }}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-lg border-skeuo-surface bg-white">
-                    {TITLES.map((t) => (
-                      <SelectItem key={t} value={t} className="cursor-pointer text-sm font-semibold text-skeuo-text focus:text-skeuo-red">
-                        {t}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Email */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput">
-                <label className="form-label">Email Address (Read-only)</label>
-                <div className="relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted"><Mail size={18} className="text-skeuo-red"/></span>
-                  <input value={email} disabled className="form-input pl-11 cursor-not-allowed opacity-60" />
-                </div>
-              </div>
-
-              {/* First name */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc((100%-162px)/2)]">
-                <label className="form-label">First Name</label>
-                <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><User size={18} className="text-skeuo-red" /></span>
-                  <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="John" className="form-input pl-11" />
-                </div>
-              </div>
-
-              {/* Last name */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc((100%-162px)/2)]">
-                <label className="form-label">Last Name</label>
-                <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><User size={18} className="text-skeuo-red" /></span>
-                  <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Doe" className="form-input pl-11" />
-                </div>
-              </div>
-
-              {/* Phone */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
-                <label className="form-label">Phone Number</label>
-                <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><Phone size={18} className="text-skeuo-red" /></span>
-                  <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+92 300 1234567" className="form-input pl-11" />
-                </div>
-              </div>
-
-              {/* Gender */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
-                <label className="form-label">Gender</label>
-                <Select
-                  value={form.gender}
-                  onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, gender: v ?? "" })); }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-lg border-2 border-skeuo-surface bg-white">
-                    {GENDERS.map((g) => (
-                      <SelectItem key={g} value={g} className="cursor-pointer text-sm font-semibold text-skeuo-text focus:text-skeuo-red">
-                        {g}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* PMDC */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
-                <label className="form-label">PMDC Number</label>
-                <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><BadgeCheck size={18} className="text-skeuo-red" /></span>
-                  <input name="pmdcNumber" value={form.pmdcNumber} onChange={handleChange} placeholder="12345-P" className="form-input pl-11" />
-                </div>
-              </div>
-
-              {/* Experience */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput sm:w-[calc(50%-8px)]">
-                <label className="form-label">Experience (Years)</label>
-                <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><Briefcase size={18} className="text-skeuo-red" /></span>
-                  <input name="experience" type="number" min={0} max={80} inputMode="numeric" value={form.experience} onChange={handleChange} className="form-input pl-11" />
-                </div>
-              </div>
-
-              {/* City */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput">
-                <label className="form-label">City</label>
-                <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><MapPin size={18} className="text-skeuo-red" /></span>
-                  <input name="city" value={form.city} onChange={handleChange} placeholder="Karachi" className="form-input pl-11" />
-                </div>
-              </div>
-
-              {/* Specializations */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput">
-                <label className="form-label">Specializations</label>
-                <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><Stethoscope size={18} className="text-skeuo-red" /></span>
-                  <input
-                    value={specText}
-                    onChange={(e) => setSpecText(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === ",") {
-                        e.preventDefault();
-                        addTag(specText, specializations, setSpecializations, setSpecText);
-                      }
-                    }}
-                    onBlur={() => addTag(specText, specializations, setSpecializations, setSpecText)}
-                    placeholder="Type and press Enter (e.g. Cardiologist)"
-                    className="form-input pl-11"
-                  />
-                </div>
-                {specializations.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {specializations.map((v) => (
-                      <span key={v} className="flex items-center gap-1.5 rounded-lg bg-skeuo-red/10 px-2.5 py-1 text-xs font-bold text-skeuo-red">
-                        {v}
-                        <button type="button" aria-label={`Remove ${v}`} onClick={() => { touched.current = true; setSpecializations(specializations.filter((x) => x !== v)); }}>
-                          <X size={12} />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Qualifications */}
-              <div className="flex w-full min-w-0 flex-col gapTextAndInput">
-                <label className="form-label">Qualifications</label>
-                <div className="group relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-skeuo-muted group-focus-within:text-skeuo-red"><GraduationCap size={18} className="text-skeuo-red" /></span>
-                  <input
-                    value={qualText}
-                    onChange={(e) => setQualText(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === ",") {
-                        e.preventDefault();
-                        addTag(qualText, qualifications, setQualifications, setQualText);
-                      }
-                    }}
-                    onBlur={() => addTag(qualText, qualifications, setQualifications, setQualText)}
-                    placeholder="Type and press Enter (e.g. MBBS, FCPS)"
-                    className="form-input pl-11"
-                  />
-                </div>
-                {qualifications.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {qualifications.map((v) => (
-                      <span key={v} className="flex items-center gap-1.5 rounded-lg bg-skeuo-red/10 px-2.5 py-1 text-xs font-bold text-skeuo-red">
-                        {v}
-                        <button type="button" aria-label={`Remove ${v}`} onClick={() => { touched.current = true; setQualifications(qualifications.filter((x) => x !== v)); }}>
-                          <X size={12} />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Message */}
-              {message && (
-                <div className={`flex w-full items-center gap-2.5 rounded-xl border px-4 py-3 ${message.type === "success" ? "border-skeuo-green/30 bg-skeuo-green/5 text-skeuo-green" : "border-rose-200 bg-rose-50 text-rose-600"}`}>
-                  {message.type === "success" ? <CheckCircle size={18}className="shrink-0" /> : <AlertCircle size={18} className="shrink-0" />}
-                  <p className="text-sm font-bold">{message.text}</p>
-                </div>
-              )}
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={saving || !doctorId}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-skeuo-red py-4 text-sm font-black text-white shadow-md transition-colors hover:bg-skeuo-red-dark active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50"
-              >
-                {saving ? (
-                  <>
-                    <Loader2 size={18} className="animate-spin" />
-                    <span>Saving Changes...</span>
-                  </>
-                ) : (
-                  <>
-                    <Save size={18} />
-                    <span>Save Profile</span>
-                  </>
-                )}
-              </button>
-            </form>
-          )}
+              </form>
+            )}
+          </div>
         </div>
       </main>
     </div>

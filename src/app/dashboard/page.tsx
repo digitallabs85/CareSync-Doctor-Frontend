@@ -43,7 +43,7 @@ const matchesSearch = (item: QueueItem, field: SearchField, term: string) => {
   return field === "token" ? value.includes(q) : value === q;
 };
 
-const Section: React.FC<SectionProps> = ({
+export const Section: React.FC<SectionProps> = ({
   icon,
   title,
   subtitle,

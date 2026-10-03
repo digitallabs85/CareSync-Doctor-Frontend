@@ -95,18 +95,18 @@
 }
 
 @layer components {
-
   .form-input {
-    @apply w-full rounded-lg border-1 border-skeuo-surface bg-skeuo-base/30 px-4 py-4 text-sm font-semibold text-skeuo-text outline-none transition-colors focus:border-skeuo-red focus:bg-white;
+    /* Changed text-sm font-semibold to text-base to match dashboard inputs */
+    @apply w-full h-10 rounded-lg border border-skeuo-surface bg-transparent px-3 py-2 text-base text-skeuo-text outline-none placeholder:text-skeuo-muted transition-colors focus:border-skeuo-red focus:bg-white;
   }
 
   .form-label {
-    @apply text-sm text-skeuo-muted
+    @apply text-sm font-medium text-skeuo-text mb-1;
+    /* Use font-medium, matching the queue labels */
   }
 
   .gapTextAndInput {
-    @apply gap-0.5
+    @apply gap-1;
+    /* Increased from 0.5 to prevent visual crowding */
   }
-
 }
-
