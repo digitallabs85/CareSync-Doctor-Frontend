@@ -12,7 +12,6 @@ import { authService, doctorService, uploadService } from "@/lib/apiService";
 import { WebcamPhotoModal } from "../components/WebcamPhotoModal";
 import { ImageCropModal } from "../components/ImageCropModal";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Section } from "../dashboard/page";
 
 type Form = {
   title: string;
