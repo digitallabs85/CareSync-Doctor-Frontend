@@ -101,7 +101,7 @@
   }
 
   .form-label {
-    @apply text-sm font-semibold tracking-wider text-skeuo-muted
+    @apply text-sm text-skeuo-muted
   }
 
   .gapTextAndInput {
