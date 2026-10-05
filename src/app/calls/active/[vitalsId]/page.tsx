@@ -21,7 +21,9 @@ export default function ActiveCallPage() {
   const [joined, setJoined] = useState(false);
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(true);
-  const [remoteUserJoined, setRemoteUserJoined] = useState(false);
+  const [remotePresent, setRemotePresent] = useState(false);
+  const [remoteVideoOn, setRemoteVideoOn] = useState(false);
+  const [remoteLeft, setRemoteLeft] = useState(false);
   const [ending, setEnding] = useState(false);
 
   const [isPatientInfoOpen, setIsPatientInfoOpen] = useState(false);
@@ -49,19 +51,33 @@ export default function ActiveCallPage() {
       const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
       clientRef.current = client;
 
+      client.on("user-joined", () => {
+        setRemotePresent(true);
+        setRemoteLeft(false);
+      });
+
       client.on("user-published", async (user, mediaType) => {
         await client.subscribe(user, mediaType);
+        setRemotePresent(true);
+        setRemoteLeft(false);
         if (mediaType === "video" && remoteVideoRef.current) {
           user.videoTrack?.play(remoteVideoRef.current);
-          setRemoteUserJoined(true);
+          setRemoteVideoOn(true);
         }
         if (mediaType === "audio") {
           user.audioTrack?.play();
         }
       });
 
-      client.on("user-unpublished", () => setRemoteUserJoined(false));
-      client.on("user-left", () => setRemoteUserJoined(false));
+      client.on("user-unpublished", (_user, mediaType) => {
+        if (mediaType === "video") setRemoteVideoOn(false);
+      });
+
+      client.on("user-left", () => {
+        setRemotePresent(false);
+        setRemoteVideoOn(false);
+        setRemoteLeft(true);
+      });
 
       try {
         const { token, channelName, appId, uid } = await consultService.getAgoraToken(vitalsId);
@@ -149,18 +165,32 @@ export default function ActiveCallPage() {
         />
 
         {/* Waiting State */}
-        {!remoteUserJoined && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0A0A0A] backdrop-blur-sm">
+        {!remoteVideoOn && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0A0A0A]">
             <div className="relative mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10">
-              <span className="absolute inset-0 animate-ping rounded-full bg-white/10"></span>
-              <User size={32} className="text-white/40" />
+              {!remoteLeft && !remotePresent && (
+                <span className="absolute inset-0 animate-ping rounded-full bg-white/10"></span>
+              )}
+              {remotePresent ? (
+                <VideoOff size={32} className="text-white/40" />
+              ) : (
+                <User size={32} className="text-white/40" />
+              )}
             </div>
             <p className="text-lg font-bold tracking-wide text-white">
-              {joined ? "Waiting for patient to join..." : "Connecting securely..."}
+              {!joined
+                ? "Connecting securely..."
+                : remoteLeft
+                  ? "Patient left the call"
+                  : remotePresent
+                    ? "Patient's camera is off"
+                    : "Waiting for patient to join..."}
             </p>
-            <p className="mt-2 text-sm font-medium text-white/50">
-              Please keep this window open.
-            </p>
+            {!remoteLeft && (
+              <p className="mt-2 text-sm font-medium text-white/50">
+                Please keep this window open.
+              </p>
+            )}
           </div>
         )}
       </div>
@@ -229,8 +259,8 @@ export default function ActiveCallPage() {
         <button
           onClick={handleToggleMic}
           className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-all ${micOn
-              ? "bg-white/20 text-white hover:bg-white/30"
-              : "bg-white text-skeuo-text shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+            ? "bg-white/20 text-white hover:bg-white/30"
+            : "bg-white text-skeuo-text shadow-[0_0_15px_rgba(255,255,255,0.3)]"
             }`}
         >
           {micOn ? <Mic size={20} /> : <MicOff size={22} className="text-rose-500" />}
@@ -254,8 +284,8 @@ export default function ActiveCallPage() {
         <button
           onClick={handleToggleCam}
           className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full transition-all ${camOn
-              ? "bg-white/20 text-white hover:bg-white/30"
-              : "bg-white text-skeuo-text shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+            ? "bg-white/20 text-white hover:bg-white/30"
+            : "bg-white text-skeuo-text shadow-[0_0_15px_rgba(255,255,255,0.3)]"
             }`}
         >
           {camOn ? <Video size={20} /> : <VideoOff size={22} className="text-rose-500" />}
