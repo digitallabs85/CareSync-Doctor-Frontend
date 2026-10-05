@@ -196,8 +196,7 @@ export default function ActiveCallPage() {
       </div>
 
       {/* ================= Local Video (PIP) ================= */}
-      {/* Floating glass pane pushed to the bottom right corner */}
-      <div className="absolute bottom-32 right-4 z-30 overflow-hidden rounded-2xl bg-slate-900 shadow-2xl ring-2 ring-white/20 sm:bottom-8 sm:right-8 sm:rounded-3xl">
+      <div className="absolute right-4 top-6 z-30 overflow-hidden rounded-2xl bg-slate-900 shadow-2xl ring-2 ring-white/20 sm:right-6 sm:top-8 sm:rounded-3xl">
         <div
           ref={localVideoRef}
           className="h-44 w-32 bg-slate-800 sm:h-56 sm:w-40 [&>video]:h-full [&>video]:w-full [&>video]:object-cover"
