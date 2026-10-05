@@ -198,7 +198,7 @@ export default function ActiveCallPage() {
           </div>
         )}
         {remotePresent && !remoteMicOn && (
-          <div className="absolute bottom-32 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/60 px-4 py-2 ring-1 ring-white/10 backdrop-blur-xl sm:bottom-32">
+          <div className="absolute bottom-32 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/60 px-4 py-2 ring-1 ring-white/10 backdrop-blur-xl sm:bottom-44">
             <MicOff size={14} className="text-rose-500" />
             <span className="text-xs font-bold uppercase tracking-widest text-white">
               Patient's mic is off
