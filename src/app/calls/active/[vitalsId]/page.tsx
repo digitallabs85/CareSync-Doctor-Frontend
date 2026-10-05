@@ -20,6 +20,7 @@ export default function ActiveCallPage() {
 
   const [joined, setJoined] = useState(false);
   const [micOn, setMicOn] = useState(true);
+  const [remoteMicOn, setRemoteMicOn] = useState(false);
   const [camOn, setCamOn] = useState(true);
   const [remotePresent, setRemotePresent] = useState(false);
   const [remoteVideoOn, setRemoteVideoOn] = useState(false);
@@ -66,16 +67,19 @@ export default function ActiveCallPage() {
         }
         if (mediaType === "audio") {
           user.audioTrack?.play();
+          setRemoteMicOn(true);
         }
       });
 
       client.on("user-unpublished", (_user, mediaType) => {
         if (mediaType === "video") setRemoteVideoOn(false);
+        if (mediaType === "audio") setRemoteMicOn(false);
       });
 
       client.on("user-left", () => {
         setRemotePresent(false);
         setRemoteVideoOn(false);
+        setRemoteMicOn(false);
         setRemoteLeft(true);
       });
 
@@ -191,6 +195,14 @@ export default function ActiveCallPage() {
                 Please keep this window open.
               </p>
             )}
+          </div>
+        )}
+        {remotePresent && !remoteMicOn && (
+          <div className="absolute bottom-32 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/60 px-4 py-2 ring-1 ring-white/10 backdrop-blur-xl sm:bottom-32">
+            <MicOff size={14} className="text-rose-500" />
+            <span className="text-xs font-bold uppercase tracking-widest text-white">
+              Patient's mic is off
+            </span>
           </div>
         )}
       </div>
