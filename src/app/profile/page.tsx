@@ -27,6 +27,24 @@ type Form = {
 const TITLES = ["Dr.", "Prof.", "Assoc. Prof.", "Asst. Prof."];
 const GENDERS = ["Male", "Female", "Other"];
 
+import type { LucideIcon } from "lucide-react";
+
+function Field({
+  label, icon: Icon, className = "", children,
+}: { label: string; icon: LucideIcon; className?: string; children: React.ReactNode }) {
+  return (
+    <div className={`flex w-full min-w-0 flex-col gapTextAndInput ${className}`}>
+      <label className="form-label flex items-center gap-2">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-skeuo-red text-white">
+          <Icon size={18} />
+        </span>
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
 export default function ProfilePage() {
   const router = useRouter();
   const touched = useRef(false);
@@ -271,9 +289,9 @@ export default function ProfilePage() {
                   <button type="button" onClick={() => setShowPhotoChoice(true)} aria-label="Change photo" className="relative shrink-0 transition-transform active:scale-95">
                     {photo ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={photo} alt="Profile" className="h-12 w-12 rounded-full object-cover sm:h-16 sm:w-16" />
+                      <img src={photo} alt="Profile" className="h-14 w-14 rounded-full object-cover sm:h-16 sm:w-16" />
                     ) : (
-                      <div className="grid h-12 w-12 place-items-center rounded-full bg-skeuo-red/10 text-lg font-black text-skeuo-red sm:h-16 sm:w-16 sm:text-xl">{initials}</div>
+                      <div className="grid h-14 w-14 place-items-center rounded-full bg-skeuo-red/10 text-lg font-black text-skeuo-red sm:h-16 sm:w-16 sm:text-xl">{initials}</div>
                     )}
                     {photoUploading && (
                       <span className="absolute inset-0 grid place-items-center rounded-full bg-white/70">
@@ -293,141 +311,57 @@ export default function ProfilePage() {
                 <div className="border-b border-skeuo-surface" />
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {/* Title */}
-                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput sm:col-span-2 sm:max-w-[200px]">
-                    <label className="form-label flex items-center gap-2">
-                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
-                        <Tag size={14} />
-                      </div>
-                      Title
-                    </label>
-                    <Select
-                      value={form.title}
-                      onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, title: v ?? p.title })); }}
-                    >
-                      <SelectTrigger className="form-input">
-                        <SelectValue />
-                      </SelectTrigger>
+                  <Field label="Title" icon={Tag} className="sm:col-span-2 sm:max-w-[200px]">
+                    <Select value={form.title} onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, title: v ?? p.title })); }}>
+                      <SelectTrigger className="form-input"><SelectValue /></SelectTrigger>
                       <SelectContent className="rounded-lg border-skeuo-surface bg-white">
                         {TITLES.map((t) => (
-                          <SelectItem key={t} value={t} className="cursor-pointer text-sm font-semibold text-skeuo-text focus:text-skeuo-red">
-                            {t}
-                          </SelectItem>
+                          <SelectItem key={t} value={t} className="cursor-pointer text-sm font-semibold text-skeuo-text focus:text-skeuo-red">{t}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                  </div>
+                  </Field>
 
-                  {/* First Name */}
-                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
-                    <label className="form-label flex items-center gap-2">
-                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
-                        <User size={14} />
-                      </div>
-                      First Name
-                    </label>
+                  <Field label="First Name" icon={User}>
                     <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="John" className="form-input" />
-                  </div>
+                  </Field>
 
-                  {/* Last Name */}
-                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
-                    <label className="form-label flex items-center gap-2">
-                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
-                        <User size={14} />
-                      </div>
-                      Last Name
-                    </label>
+                  <Field label="Last Name" icon={User}>
                     <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Doe" className="form-input" />
-                  </div>
+                  </Field>
 
-                  {/* Email */}
-                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput sm:col-span-2">
-                    <label className="form-label flex items-center gap-2">
-                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
-                        <Mail size={14} />
-                      </div>
-                      Email Address (Read-only)
-                    </label>
+                  <Field label="Email Address (Read-only)" icon={Mail} className="sm:col-span-2">
                     <input value={email} disabled className="form-input cursor-not-allowed bg-skeuo-surface/20 opacity-60" />
-                  </div>
+                  </Field>
 
-                  {/* Phone */}
-                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
-                    <label className="form-label flex items-center gap-2">
-                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
-                        <Phone size={14} />
-                      </div>
-                      Phone Number
-                    </label>
+                  <Field label="Phone Number" icon={Phone}>
                     <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+92 300 1234567" className="form-input" />
-                  </div>
+                  </Field>
 
-                  {/* Gender */}
-                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
-                    <label className="form-label flex items-center gap-2">
-                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
-                        <Users size={14} />
-                      </div>
-                      Gender
-                    </label>
-                    <Select
-                      value={form.gender}
-                      onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, gender: v ?? "" })); }}
-                    >
-                      <SelectTrigger className="form-input">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-lg border-2 border-skeuo-surface bg-white">
+                  <Field label="Gender" icon={Users}>
+                    <Select value={form.gender} onValueChange={(v) => { touched.current = true; setForm((p) => ({ ...p, gender: v ?? "" })); }}>
+                      <SelectTrigger className="form-input"><SelectValue placeholder="Select" /></SelectTrigger>
+                      <SelectContent className="rounded-lg border-skeuo-surface bg-white">
                         {GENDERS.map((g) => (
-                          <SelectItem key={g} value={g} className="cursor-pointer text-sm font-semibold text-skeuo-text focus:text-skeuo-red">
-                            {g}
-                          </SelectItem>
+                          <SelectItem key={g} value={g} className="cursor-pointer text-sm font-semibold text-skeuo-text focus:text-skeuo-red">{g}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                  </div>
+                  </Field>
 
-                  {/* PMDC */}
-                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
-                    <label className="form-label flex items-center gap-2">
-                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
-                        <BadgeCheck size={14} />
-                      </div>
-                      PMDC Number
-                    </label>
+                  <Field label="PMDC Number" icon={BadgeCheck}>
                     <input name="pmdcNumber" value={form.pmdcNumber} onChange={handleChange} placeholder="12345-P" className="form-input" />
-                  </div>
+                  </Field>
 
-                  {/* Experience */}
-                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput">
-                    <label className="form-label flex items-center gap-2">
-                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
-                        <Briefcase size={14} />
-                      </div>
-                      Experience (Years)
-                    </label>
+                  <Field label="Experience (Years)" icon={Briefcase}>
                     <input name="experience" type="number" min={0} max={80} inputMode="numeric" value={form.experience} onChange={handleChange} className="form-input" />
-                  </div>
+                  </Field>
 
-                  {/* City */}
-                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput sm:col-span-2">
-                    <label className="form-label flex items-center gap-2">
-                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
-                        <MapPin size={14} />
-                      </div>
-                      City
-                    </label>
+                  <Field label="City" icon={MapPin} className="sm:col-span-2">
                     <input name="city" value={form.city} onChange={handleChange} placeholder="Karachi" className="form-input" />
-                  </div>
+                  </Field>
 
-                  {/* Specializations */}
-                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput sm:col-span-2">
-                    <label className="form-label flex items-center gap-2">
-                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
-                        <Stethoscope size={14} />
-                      </div>
-                      Specializations
-                    </label>
+                  <Field label="Specializations" icon={Stethoscope} className="sm:col-span-2">
                     <input
                       value={specText}
                       onChange={(e) => setSpecText(e.target.value)}
@@ -442,7 +376,7 @@ export default function ProfilePage() {
                       className="form-input"
                     />
                     {specializations.length > 0 && (
-                      <div className="mt-1 flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2">
                         {specializations.map((v) => (
                           <span key={v} className="flex items-center gap-1.5 rounded-lg bg-skeuo-red/10 px-2.5 py-1 text-xs font-bold text-skeuo-red">
                             {v}
@@ -453,16 +387,9 @@ export default function ProfilePage() {
                         ))}
                       </div>
                     )}
-                  </div>
+                  </Field>
 
-                  {/* Qualifications */}
-                  <div className="group flex w-full min-w-0 flex-col gapTextAndInput sm:col-span-2">
-                    <label className="form-label flex items-center gap-2">
-                      <div className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-skeuo-red/10 text-skeuo-red transition-colors group-focus-within:bg-skeuo-red group-focus-within:text-white">
-                        <GraduationCap size={14} />
-                      </div>
-                      Qualifications
-                    </label>
+                  <Field label="Qualifications" icon={GraduationCap} className="sm:col-span-2">
                     <input
                       value={qualText}
                       onChange={(e) => setQualText(e.target.value)}
@@ -477,7 +404,7 @@ export default function ProfilePage() {
                       className="form-input"
                     />
                     {qualifications.length > 0 && (
-                      <div className="mt-1 flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2">
                         {qualifications.map((v) => (
                           <span key={v} className="flex items-center gap-1.5 rounded-lg bg-skeuo-red/10 px-2.5 py-1 text-xs font-bold text-skeuo-red">
                             {v}
@@ -488,7 +415,7 @@ export default function ProfilePage() {
                         ))}
                       </div>
                     )}
-                  </div>
+                  </Field>
                 </div>
 
                 {/* Message */}

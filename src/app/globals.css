@@ -97,11 +97,11 @@
 @layer components {
   .form-input {
     /* Changed text-sm font-semibold to text-base to match dashboard inputs */
-    @apply w-full h-10 rounded-lg border border-skeuo-surface bg-transparent px-3 py-2 text-base text-skeuo-text outline-none placeholder:text-skeuo-muted transition-colors focus:border-skeuo-red focus:bg-white;
+    @apply w-full h-12 rounded-lg border border-skeuo-surface bg-transparent px-3 py-2 text-base text-skeuo-text outline-none placeholder:text-skeuo-muted transition-colors focus:border-skeuo-red focus:bg-white;
   }
 
   .form-label {
-    @apply text-sm font-medium text-skeuo-text mb-1;
+    @apply text-sm font-semibold text-skeuo-text mb-1;
     /* Use font-medium, matching the queue labels */
   }
 
